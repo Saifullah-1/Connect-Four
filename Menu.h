@@ -1,6 +1,5 @@
-#ifndef MENU
+#ifndef MENU /*Header Guard*/
 #define MENU
-#include "Menu.c"
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
