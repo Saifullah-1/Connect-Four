@@ -4,10 +4,13 @@
 #include <windows.h>
 #include <time.h>
 #include "GameLoop.h"
-int rows = 9, colmns = 7;
-int column_number;
-int grid[/*rows=*/9][/*colmns=*/7]; // read dimentions from xml file
-int player_turn = 1;
+
+int rows = 9;
+int colmns = 7;
+char board[/*rows=*/9][/*colmns=*/7]; // read dimentions from xml file
+int player_turn_arr[/*rows*colmns*/ 9 * 7];
+int turn = 0;
+int ColumnFreeSpacesArr[/*colmns*/ 7];
 typedef struct
 {
     int PlayerScore;
@@ -17,6 +20,24 @@ typedef struct
 Player Player1 = {.PlayerScore = 0, .PlayerMoves = 0}; // Player1 symbol X and blue color
 Player Player2 = {.PlayerScore = 0, .PlayerMoves = 0}; // Player2 symbol Y and red color
 
+const char Player1Symbol = 'X';
+const char Player2Symbol = 'O';
+
+void resetPlayerTurnArr()
+{
+    for (int i = 0; i < rows * colmns; i += 2)
+    {
+        player_turn_arr[i] = 1;
+        player_turn_arr[i + 1] = 2;
+    }
+}
+void resetColumnFreeSpacesArr() // array for free spaces in each column
+{
+    for (int i = 0; i < colmns; i++)
+    {
+        ColumnFreeSpacesArr[i] = rows;
+    }
+}
 void resetPlayerData(void)
 {
     Player1.PlayerScore = 0;
@@ -24,42 +45,163 @@ void resetPlayerData(void)
     Player1.PlayerMoves = 0;
     Player2.PlayerMoves = 0;
 }
-void grid_design(void)
+void resetBoard(void) // moves array
 {
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < colmns; j++)
+        {
+            board[i][j] = ' ';
+        }
+    }
+}
+void printBoard(void) // board
+{
+    gotoxy(0, 3);
     yellow();
-    int i, j, k, l, m;
-    for (i = 1; i <= colmns; i++)
+    for (int i = 1; i <= colmns; i++)
     {
-        gotoxy(4 + (i - 1) * 4, 2);
-        printf("%c%i", 31, i);
+        printf(" %c%i ", 31, i);
     }
-    for (j = 1; j <= rows + 1; j++)
+    printf("\n");
+    for (int i = 0; i < rows; i++)
     {
-        gotoxy(3, 3 + (j - 1) * 2);
-        for (k = 1; k <= colmns; k++)
+        for (int k = 0; k < colmns; k++)
         {
-            printf("+---");
+            printf("|---");
         }
-        printf("+");
-    }
-    for (l = 1; l <= colmns + 1; l++)
-    {
-        for (m = 1; m <= rows; m++)
+        printf("|");
+        printf("\n");
+        for (int j = 0; j < colmns; j++)
         {
-            gotoxy(3 + (l - 1) * 4, 4 + (m - 1) * 2);
-            printf("|");
+            printf("| %c ", board[i][j]);
+        }
+        printf("|");
+        printf("\n");
+    }
+    for (int k = 0; k < colmns; k++)
+    {
+        printf("|---");
+    }
+    printf("|");
+    printf("\n");
+}
+int checkFreeSpaces() // free spaces in board  if free spaces == 0 game ends
+{
+    int freeSpaces = rows * colmns;
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < colmns; j++)
+        {
+            if (board[i][j] != ' ')
+            {
+                freeSpaces--;
+            }
         }
     }
-    printf("\n\n");
+    return (freeSpaces);
+}
+void checkColumnFreeSpaces(int column_index) // column_index = column number - 1
+{
+    for (int i = 0; i < rows; i++)
+    {
+        if (board[i][column_index] != ' ')
+        {
+            ColumnFreeSpacesArr[column_index]--;
+        }
+    }
+}
+// Human vs Human Mode
+void playerMove()
+{
+    int columnNumber; // user input
+    int r;
+    do
+    {
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("                                                                                                      ");
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("Enter Column Number : ");
+        scanf("%d", &columnNumber);
+        if (ColumnFreeSpacesArr[columnNumber - 1] == 0 || columnNumber < 1 || columnNumber > colmns)
+        {
+            gotoxy(0, 8 + (rows - 1) * 2);
+            printf("                                                                                                      ");
+        }
+        else
+        {
+            checkColumnFreeSpaces(columnNumber - 1);
+            r = ColumnFreeSpacesArr[columnNumber - 1] - 1;
+            if (player_turn_arr[turn] == 1)
+            {
+                board[r][columnNumber - 1] = Player1Symbol;
+                turn++;
+                Player1.PlayerMoves++;
+                break;
+            }
+            else
+            {
+                board[r][columnNumber - 1] = Player2Symbol;
+                turn++;
+                Player2.PlayerMoves++;
+                break;
+            }
+            ColumnFreeSpacesArr[columnNumber - 1]--;
+        }
+    } while (ColumnFreeSpacesArr[columnNumber - 1] == 0 || columnNumber < 1 || columnNumber > colmns);
 }
 
-void playerData(void)
+// VS computer
+void computerMove()
+{
+}
+void checkScore()
+{
+    // horizontal
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < colmns; j++)
+        {
+            if (board[i][j] == board[i][j + 1] && board[i][j + 1] == board[i][j + 2] && board[i][j + 2] == board[i][j + 3])
+            {
+                if (board[i][j] == Player1Symbol)
+                {
+                    Player1.PlayerScore++;
+                }
+                else if (board[i][j] == Player2Symbol)
+                {
+                    Player2.PlayerScore++;
+                }
+            }
+        }
+    }
+    // vertical
+    for (int i = 0; i < colmns; i++)
+    {
+        for (int j = 0; j < rows; j++)
+        {
+            if (board[i][j] == board[i + 1][j] && board[i + 1][j] == board[i + 2][j] && board[i + 2][j] == board[i + 3][j])
+            {
+                if (board[i][j] == Player1Symbol)
+                {
+                    Player1.PlayerScore++;
+                }
+                else if (board[i][j] == Player2Symbol)
+                {
+                    Player2.PlayerScore++;
+                }
+            }
+        }
+    }
+    // diagonal
+}
+void playerData()
 {
     yellow();
-    if (player_turn == 1 || player_turn == 2)
+    if (player_turn_arr[turn] == 1 || player_turn_arr[turn] == 2)
     {
         gotoxy(23 + (colmns)*4, 3);
-        printf("Player %i Turn", player_turn);
+        printf("Player %i Turn", player_turn_arr[turn]);
     }
     else
     {
@@ -77,25 +219,4 @@ void playerData(void)
     gotoxy(23 + (colmns)*4, 18);
     printf("Time passed: %i"); // time function
     reset();
-}
-void scan_column_number(int column, int max, int min)
-{
-    printf("Enter column number : ");
-    scanf("%i", &column_number);
-    while (column_number < 1 || column_number > colmns)
-    {
-        printf("Enter valid column number : ");
-        scanf("%i", &column_number);
-    }
-    int i = 0;
-    int k = 0;
-    if (i == colmns + 1)
-    {
-        i = 0;
-        k++;
-    }
-    grid[i++][k] = column_number;
-}
-void drawing_in_grid(void)
-{
 }
