@@ -89,7 +89,7 @@ void scan_column_number(int column, int max, int min)
     }
     int i = 0;
     int k = 0;
-    if (i = colmns + 1)
+    if (i == colmns + 1)
     {
         i = 0;
         k++;
