@@ -26,7 +26,19 @@ int main()
             
             break;
         case 2:
-            ;
+            system("cls");
+            resetBoard();
+            resetPlayerData();
+            resetPlayerTurnArr();
+            resetColumnFreeSpacesArr();
+            while (checkFreeSpaces()!=0)
+            {
+                system("cls");
+                printBoard();
+                playerData();
+                playerMove();
+            }
+            checkScore();
             break;
         }
         break;
