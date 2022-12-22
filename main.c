@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include "GameLoop.h"
+#include "SaveAndLoad.h"
 int main_menu_choice = 1;
 int gameMode_menu_choice = 1;
 
@@ -33,12 +34,16 @@ int main()
             resetColumnFreeSpacesArr();
             while (checkFreeSpaces()!=0)
             {
-                system("cls");
+                //system("cls");
                 printBoard();
                 playerData();
                 playerMove();
             }
+
+            printBoard();
             checkScore();
+            playerData();
+            
             break;
         }
         break;
