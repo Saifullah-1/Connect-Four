@@ -47,19 +47,19 @@ void frame(int height)
     }
 }
 
-/*void ShowConsoleCursor(int showFlag)
+void ShowConsoleCursor(int showFlag)
 {
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cursorInfo;
     GetConsoleCursorInfo(out, &cursorInfo);
     cursorInfo.bVisible = showFlag;
     SetConsoleCursorInfo(out, &cursorInfo);
-}*/
+}
 /*The Main Menu*/
 
 int menu(void)
 {
-    //ShowConsoleCursor(0);
+    ShowConsoleCursor(0);
     HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
     int pos = 1;
     char ch;
@@ -104,8 +104,7 @@ int menu(void)
 //The Game Mode Menu
 int gameMode(void)
 {
-
-    //ShowConsoleCursor(0);
+    ShowConsoleCursor(0);
     HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
     int pos = 1;
     char ch;
