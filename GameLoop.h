@@ -7,8 +7,15 @@
 #include <windows.h>
 #include "GameLoop.c"
 
+void resetPlayerTurnArr(void);
+void resetColumnFreeSpacesArr(void);
 void resetPlayerData(void);
-void grid_design(void);
+void resetBoard(void);
+void printBoard(void);
+int checkFreeSpaces(void);
+void checkColumnFreeSpaces(int column_index);
+void playerMove(void);
+void computerMove(void);
+void checkScore(void);
 void playerData(void);
-void scan_column_number (int column, int max, int min);
 #endif
