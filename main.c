@@ -1,6 +1,10 @@
 #include "Menu.h"
 #include "GameLoop.h"
-#include "SaveAndLoad.h"
+//#include <time.h>
+
+//#include "SaveAndLoad.h"
+
+
 int main_menu_choice = 1;
 int gameMode_menu_choice = 1;
 
@@ -24,10 +28,11 @@ int main()
         switch (gameMode_menu_choice)
         {
         case 1:
-            
+
             break;
         case 2:
             system("cls");
+            int start = clock();
             resetBoard();
             resetPlayerData();
             resetPlayerTurnArr();
@@ -38,12 +43,15 @@ int main()
                 printBoard();
                 playerData();
                 playerMove();
+                int end = clock();
+                Time (start , end);
             }
-
-            printBoard();
             checkScore();
+            system("cls");
+            printBoard();
+            Instant_Save(Player1.PlayerScore,Player2.PlayerScore);
             playerData();
-            
+
             break;
         }
         break;
@@ -73,7 +81,7 @@ int main()
         {
             goto credit;
         }
-        
+
         break;
     case 5:
         exit(-1);

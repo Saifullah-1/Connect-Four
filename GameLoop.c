@@ -4,13 +4,55 @@
 #include <windows.h>
 #include <time.h>
 #include "GameLoop.h"
+#include "Menu.c"
+
 
 int rows = 6;
 int colmns = 6;
-char board[/*rows=*/6][/*colmns=*/6]; // read dimentions from xml file
-int player_turn_arr[/*rows*colmns+2*/ 6 * 6+2];
+char board[/*rows=*/6][/*columns=*/6]; // read dimentions from xml file
+int player_turn_arr[/*rows*columns+2*/ 6 * 6+2];
 int turn = 0;
-int ColumnFreeSpacesArr[/*colmns*/ 6];
+int ColumnFreeSpacesArr[/*columns*/ 6];
+
+int hours , minutes , seconds ;
+
+
+void Time (int start , int end)
+{
+    seconds = (end - start)/CLOCKS_PER_SEC;
+    minutes=0 , hours=0 ;
+    while(seconds>=60)
+    {
+        minutes += seconds/60;
+        seconds -= minutes*60;
+    }
+    while (minutes>=60)
+    {
+        hours += minutes/60;
+        minutes %= 60;
+    }
+}
+
+
+void Instant_Save(int i , int j)
+{
+    FILE* Psave;
+    Psave = fopen("Save.txt","w");
+    fprintf (Psave , "1's Score \t 2's Score\n");
+    fprintf (Psave , "%d \t \t %d" ,i,j);
+    fclose (Psave);
+    }
+
+void TopScores(char name[] , int s)    // s refers To Player's Score
+{
+    FILE* Pscores;
+    Pscores = fopen ("Scores.txt","a");
+    printf ("%c\t%d",name,s);
+    fclose (Pscores);
+}
+
+
+
 typedef struct
 {
     int PlayerScore;
@@ -182,9 +224,9 @@ void checkScore(void)
         }
     }
     // vertical
-    for (int i = 0; i < colmns; i++)
+    for (int j = 0; j < colmns; j++)
     {
-        for (int j = 0; j < rows-3; j++)
+        for (int i = 0; i < rows-3; i++)
         {
             if (board[i][j] == board[i + 1][j] && board[i + 1][j] == board[i + 2][j] && board[i + 2][j] == board[i + 3][j])
             {
@@ -200,6 +242,41 @@ void checkScore(void)
         }
     }
     // diagonal
+    for (int i= 0; i < rows-3 ; i++)
+    {
+        for (int j = 0; j < colmns-3; j++)
+        {
+            if (board[i][j] == board[i+1][j+1] && board[i+1][j+1] == board[i+2][j+2] && board[i+2][j+2] == board[i+3][j+3])
+            {
+                if (board[i][j] == Player1Symbol)
+                {
+                    Player1.PlayerScore++;
+                }
+                else if (board[i][j] == Player2Symbol)
+                {
+                    Player2.PlayerScore++;
+                }
+            }
+        }
+    }
+    for (int i= rows-1; i < rows-4 ; i++)
+    {
+        for (int j = 0; j < colmns-3; j++)
+        {
+            if (board[i][j] == board[i-1][j-1] && board[i-1][j-1] == board[i-2][j-2] && board[i-2][j-2] == board[i-3][j-3])
+            {
+                if (board[i][j] == Player1Symbol)
+                {
+                    Player1.PlayerScore++;
+                }
+                else if (board[i][j] == Player2Symbol)
+                {
+                    Player2.PlayerScore++;
+                }
+            }
+        }
+    }
+
 }
 void playerData(void)
 {
@@ -227,7 +304,7 @@ void playerData(void)
     gotoxy(23 + (colmns)*4, 9);LightBlue();
     printf("Player2 score: %i", Player2.PlayerScore);
     gotoxy(23 + (colmns)*4, 10);yellow();
-    printf("Time passed: %i"); // time function
+    printf("Time passed: %i Hours %i Minutes %i Seconds", hours, minutes, seconds); // time function
     reset();
 }
 void checkWinner(void){
@@ -255,4 +332,10 @@ void checkWinner(void){
         printf("\nPlease Enter Player2 Name : ");
         fgets(Player2.PlayerName, 100,stdin);
     }
+    FILE* Posave;
+    FILE* Pcsave;
+    Posave = fopen("Save.txt","w");
+    fprintf (Posave , "%s Score \t Player 2 Score\n");
+    fprintf (Posave , "%d \t %d" ,Player1.PlayerScore,Player2.PlayerScore);
+    Pcsave = fclose ("Save.txt");
 }
