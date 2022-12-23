@@ -259,11 +259,11 @@ void checkScore(void)
             }
         }
     }
-    for (int i= rows-1; i < rows-4 ; i++)
+    for (int i = 0; i < rows-3 ; i++)
     {
-        for (int j = 0; j < colmns-3; j++)
+        for (int j = colmns-3 ; j < colmns ; j++)
         {
-            if (board[i][j] == board[i-1][j-1] && board[i-1][j-1] == board[i-2][j-2] && board[i-2][j-2] == board[i-3][j-3])
+            if (board[i][j] == board[i+1][j - 1] && board[i][j] == board[i+2][j - 2] && board[i][j] == board[i+3][j - 3])
             {
                 if (board[i][j] == Player1Symbol)
                 {
