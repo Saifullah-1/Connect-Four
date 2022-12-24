@@ -43,15 +43,20 @@ int main()
                 printBoard();
                 playerData();
                 playerMove();
+                int i = Player1.PlayerScore;
+                int j = Player2.PlayerScore;
+                checkScore();
+                Player1.PlayerScore -= i;
+                Player2.PlayerScore -= j;
                 int end = clock();
                 Time (start , end);
             }
-            checkScore();
             system("cls");
             printBoard();
             Instant_Save(Player1.PlayerScore,Player2.PlayerScore);
             playerData();
-
+            checkWinner();
+            gotoxy(0, 10 + (rows - 1) * 2);
             break;
         }
         break;

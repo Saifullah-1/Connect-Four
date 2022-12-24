@@ -5,6 +5,7 @@
 #include <time.h>
 #include "GameLoop.h"
 #include "Menu.c"
+#include <ctype.h>
 
 
 int rows = 6;
@@ -15,6 +16,22 @@ int turn = 0;
 int ColumnFreeSpacesArr[/*columns*/ 6];
 
 int hours , minutes , seconds ;
+
+void SaveTop(char s[],int n)
+{
+    int i=0;
+    FILE* Ptop;
+    Ptop = fopen ("Scores.txt","a");
+    while (s[i])
+    {
+        fprintf(Ptop,"%c",tolower(s[i]));
+        i++;
+    }
+    fprintf(Ptop," : %d\n",n);
+
+    fclose (Ptop);
+    return 0;
+}
 
 
 void Time (int start , int end)
@@ -314,28 +331,29 @@ void checkWinner(void){
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
         red();printf("Player1 Won! Please Enter Player1 Name : ");
-        fgets(Player1.PlayerName, 100,stdin);
+        scanf("%s",Player1.PlayerName);
+        SaveTop(Player1.PlayerName,Player1.PlayerScore);
     }else if (Player1.PlayerScore<Player2.PlayerScore)
     {
         gotoxy(0, 8 + (rows - 1) * 2);
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
-        LightBlue();printf("Player2 Won! Please Enter Player2 Name : ");
-        fgets(Player2.PlayerName, 100,stdin);
+        LightBlue();
+        printf("Player2 Won! Please Enter Player2 Name : ");
+        scanf("%s",Player2.PlayerName);
+        SaveTop(Player2.PlayerName,Player2.PlayerScore);
     }else
     {
         gotoxy(0, 8 + (rows - 1) * 2);
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
-        reset();printf("Draw! Please Enter Player1 Name : ");
-        fgets(Player1.PlayerName, 100,stdin);
+        reset();
+        printf("Draw! Please Enter Player1 Name : ");
+        scanf("%s",Player1.PlayerName);
+        SaveTop(Player1.PlayerName,Player1.PlayerScore);
+
         printf("\nPlease Enter Player2 Name : ");
-        fgets(Player2.PlayerName, 100,stdin);
+        scanf("%s",Player2.PlayerName);
+        SaveTop(Player2.PlayerName,Player2.PlayerScore);
     }
-    FILE* Posave;
-    FILE* Pcsave;
-    Posave = fopen("Save.txt","w");
-    fprintf (Posave , "%s Score \t Player 2 Score\n");
-    fprintf (Posave , "%d \t %d" ,Player1.PlayerScore,Player2.PlayerScore);
-    Pcsave = fclose ("Save.txt");
 }
