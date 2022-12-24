@@ -3,72 +3,66 @@
 #include <math.h>
 #include <windows.h>
 #include <time.h>
-#include "GameLoop.h"
-#include "Menu.c"
 #include <ctype.h>
+#include "GameLoop.h"
 
-
-int rows = 6;
-int colmns = 6;
-char board[/*rows=*/6][/*columns=*/6]; // read dimentions from xml file
-int player_turn_arr[/*rows*columns+2*/ 6 * 6+2];
+int rows = 4;
+int colmns = 4;
+char board[/*rows=*/4][/*columns=*/4]; // read dimentions from xml file
+int player_turn_arr[/*rows*columns+2*/ 4 * 4 + 2];
 int turn = 0;
-int ColumnFreeSpacesArr[/*columns*/ 6];
+int ColumnFreeSpacesArr[/*columns*/ 4];
 
-int hours , minutes , seconds ;
+int hours, minutes, seconds;
 
-void SaveTop(char s[],int n)
+void SaveTop(char s[], int n)
 {
-    int i=0;
-    FILE* Ptop;
-    Ptop = fopen ("Scores.txt","a");
+    int i = 0;
+    FILE *Ptop;
+    Ptop = fopen("Scores.txt", "a");
     while (s[i])
     {
-        fprintf(Ptop,"%c",tolower(s[i]));
+        fprintf(Ptop, "%c", tolower(s[i]));
         i++;
     }
-    fprintf(Ptop," : %d\n",n);
+    fprintf(Ptop, " : %d\n", n);
 
-    fclose (Ptop);
+    fclose(Ptop);
     return 0;
 }
 
-
-void Time (int start , int end)
+void Time(int start, int end)
 {
-    seconds = (end - start)/CLOCKS_PER_SEC;
-    minutes=0 , hours=0 ;
-    while(seconds>=60)
+    seconds = (end - start) / CLOCKS_PER_SEC;
+    minutes = 0, hours = 0;
+    while (seconds >= 60)
     {
-        minutes += seconds/60;
-        seconds -= minutes*60;
+        minutes += seconds / 60;
+        seconds -= minutes * 60;
     }
-    while (minutes>=60)
+    while (minutes >= 60)
     {
-        hours += minutes/60;
+        hours += minutes / 60;
         minutes %= 60;
     }
 }
 
-
-void Instant_Save(int i , int j)
+void Instant_Save(int i, int j)
 {
-    FILE* Psave;
-    Psave = fopen("Save.txt","w");
-    fprintf (Psave , "1's Score \t 2's Score\n");
-    fprintf (Psave , "%d \t \t %d" ,i,j);
-    fclose (Psave);
-    }
-
-void TopScores(char name[] , int s)    // s refers To Player's Score
-{
-    FILE* Pscores;
-    Pscores = fopen ("Scores.txt","a");
-    printf ("%c\t%d",name,s);
-    fclose (Pscores);
+    FILE *Psave;
+    Psave = fopen("Save.txt", "w");
+    fprintf(Psave, "1's Score \t 2's Score\n");
+    fprintf(Psave, "%d \t \t %d", i, j);
+    fclose(Psave);
 }
 
-
+void TopScores(char name[], int s) // s refers To Player's Score
+{
+    FILE *Pscores;
+    Pscores = fopen("Scores.txt", "a");
+    printf("%c\t%d", name, s);
+    fclose(Pscores);
+}
 
 typedef struct
 {
@@ -120,12 +114,14 @@ void printBoard(void) // board
     yellow();
     for (int i = 1; i <= colmns; i++)
     {
-        if (i>9)
+        if (i > 9)
         {
             printf(" %i ", i);
         }
-        else{
-        printf(" %i  ", i);}
+        else
+        {
+            printf(" %i  ", i);
+        }
     }
     printf("\n");
     for (int i = 0; i < rows; i++)
@@ -139,13 +135,18 @@ void printBoard(void) // board
         for (int j = 0; j < colmns; j++)
         {
             printf("|");
-            if (board[i][j]==Player1Symbol)
+            if (board[i][j] == Player1Symbol)
             {
-                red();printf(" %c ", board[i][j]);
-            }else if (board[i][j]==Player2Symbol)
+                red();
+                printf(" %c ", board[i][j]);
+            }
+            else if (board[i][j] == Player2Symbol)
             {
-                LightBlue();printf(" %c ", board[i][j]);
-            }else{
+                LightBlue();
+                printf(" %c ", board[i][j]);
+            }
+            else
+            {
                 printf(" %c ", board[i][j]);
             }
             yellow();
@@ -199,7 +200,6 @@ void playerMove(void)
             if (player_turn_arr[turn] == 1)
             {
                 board[r][columnNumber - 1] = Player1Symbol;
-                turn++;
                 Player1.PlayerMoves++;
                 ColumnFreeSpacesArr[columnNumber - 1]--;
                 break;
@@ -207,7 +207,6 @@ void playerMove(void)
             else
             {
                 board[r][columnNumber - 1] = Player2Symbol;
-                turn++;
                 Player2.PlayerMoves++;
                 ColumnFreeSpacesArr[columnNumber - 1]--;
                 break;
@@ -222,10 +221,10 @@ void computerMove(void)
 }
 void checkScore(void)
 {
-    // horizontal
+    // HORIZONTAL
     for (int i = 0; i < rows; i++)
     {
-        for (int j = 0; j < colmns-3; j++)
+        for (int j = 0; j < colmns - 3; j++)
         {
             if (board[i][j] == board[i][j + 1] && board[i][j + 1] == board[i][j + 2] && board[i][j + 2] == board[i][j + 3])
             {
@@ -240,10 +239,10 @@ void checkScore(void)
             }
         }
     }
-    // vertical
+    // VERTICAL
     for (int j = 0; j < colmns; j++)
     {
-        for (int i = 0; i < rows-3; i++)
+        for (int i = 0; i < rows - 3; i++)
         {
             if (board[i][j] == board[i + 1][j] && board[i + 1][j] == board[i + 2][j] && board[i + 2][j] == board[i + 3][j])
             {
@@ -258,12 +257,12 @@ void checkScore(void)
             }
         }
     }
-    // diagonal
-    for (int i= 0; i < rows-3 ; i++)
+    // DIAGONAL
+    for (int i = 0; i < rows - 3; i++)
     {
-        for (int j = 0; j < colmns-3; j++)
+        for (int j = 0; j < colmns - 3; j++)
         {
-            if (board[i][j] == board[i+1][j+1] && board[i+1][j+1] == board[i+2][j+2] && board[i+2][j+2] == board[i+3][j+3])
+            if (board[i][j] == board[i + 1][j + 1] && board[i + 1][j + 1] == board[i + 2][j + 2] && board[i + 2][j + 2] == board[i + 3][j + 3])
             {
                 if (board[i][j] == Player1Symbol)
                 {
@@ -276,11 +275,11 @@ void checkScore(void)
             }
         }
     }
-    for (int i = 0; i < rows-3 ; i++)
+    for (int i = 0; i < rows - 3; i++)
     {
-        for (int j = colmns-3 ; j < colmns ; j++)
+        for (int j = colmns - 3; j < colmns; j++)
         {
-            if (board[i][j] == board[i+1][j - 1] && board[i][j] == board[i+2][j - 2] && board[i][j] == board[i+3][j - 3])
+            if (board[i][j] == board[i + 1][j - 1] && board[i][j] == board[i + 2][j - 2] && board[i][j] == board[i + 3][j - 3])
             {
                 if (board[i][j] == Player1Symbol)
                 {
@@ -293,18 +292,20 @@ void checkScore(void)
             }
         }
     }
-
 }
 void playerData(void)
 {
     yellow();
     if (player_turn_arr[turn] == 1)
     {
-        gotoxy(23 + (colmns)*4, 4);red();
+        gotoxy(23 + (colmns)*4, 4);
+        red();
         printf("Player %i Turn", player_turn_arr[turn]);
-    }else if (player_turn_arr[turn] == 2)
+    }
+    else if (player_turn_arr[turn] == 2)
     {
-        gotoxy(23 + (colmns)*4, 4);LightBlue();
+        gotoxy(23 + (colmns)*4, 4);
+        LightBlue();
         printf("Player %i Turn", player_turn_arr[turn]);
     }
     else
@@ -312,48 +313,106 @@ void playerData(void)
         gotoxy(23 + (colmns)*4, 4);
         printf("Computer Turn");
     }
-    gotoxy(23 + (colmns)*4, 6);red();
+    gotoxy(23 + (colmns)*4, 6);
+    red();
     printf("Number of moves of Player1 : %i", Player1.PlayerMoves);
-    gotoxy(23 + (colmns)*4, 7);LightBlue();
+    gotoxy(23 + (colmns)*4, 7);
+    LightBlue();
     printf("Number of moves of Player2 : %i", Player2.PlayerMoves);
-    gotoxy(23 + (colmns)*4, 8);red();
+    gotoxy(23 + (colmns)*4, 8);
+    red();
     printf("Player1 score: %i", Player1.PlayerScore);
-    gotoxy(23 + (colmns)*4, 9);LightBlue();
+    gotoxy(23 + (colmns)*4, 9);
+    LightBlue();
     printf("Player2 score: %i", Player2.PlayerScore);
-    gotoxy(23 + (colmns)*4, 10);yellow();
-    printf("Time passed: %i Hours %i Minutes %i Seconds", hours, minutes, seconds); // time function
+    gotoxy(23 + (colmns)*4, 10);
+    yellow();
+    printf("Time passed: %02i:%02i:%02i", hours, minutes, seconds); // time function
     reset();
 }
-void checkWinner(void){
-    if (Player1.PlayerScore>Player2.PlayerScore)
+void checkWinner(void)
+{
+    if (Player1.PlayerScore > Player2.PlayerScore)
     {
         gotoxy(0, 8 + (rows - 1) * 2);
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
-        red();printf("Player1 Won! Please Enter Player1 Name : ");
-        scanf("%s",Player1.PlayerName);
-        SaveTop(Player1.PlayerName,Player1.PlayerScore);
-    }else if (Player1.PlayerScore<Player2.PlayerScore)
+        red();
+        printf("Player1 Won! Please Enter Player1 Name : ");
+        scanf("%s", Player1.PlayerName);
+        SaveTop(Player1.PlayerName, Player1.PlayerScore);
+    }
+    else if (Player1.PlayerScore < Player2.PlayerScore)
     {
         gotoxy(0, 8 + (rows - 1) * 2);
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
         LightBlue();
         printf("Player2 Won! Please Enter Player2 Name : ");
-        scanf("%s",Player2.PlayerName);
-        SaveTop(Player2.PlayerName,Player2.PlayerScore);
-    }else
+        scanf("%s", Player2.PlayerName);
+        SaveTop(Player2.PlayerName, Player2.PlayerScore);
+    }
+    else
     {
         gotoxy(0, 8 + (rows - 1) * 2);
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
         reset();
         printf("Draw! Please Enter Player1 Name : ");
-        scanf("%s",Player1.PlayerName);
-        SaveTop(Player1.PlayerName,Player1.PlayerScore);
+        scanf("%s", Player1.PlayerName);
+        SaveTop(Player1.PlayerName, Player1.PlayerScore);
 
         printf("\nPlease Enter Player2 Name : ");
-        scanf("%s",Player2.PlayerName);
-        SaveTop(Player2.PlayerName,Player2.PlayerScore);
+        scanf("%s", Player2.PlayerName);
+        SaveTop(Player2.PlayerName, Player2.PlayerScore);
     }
+}
+void startGame(void)
+{
+    char userInput[100];
+    while (1)
+    {
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("                                                                                                                                          ");
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("Please Enter [1]T0 Start Game >> ");
+        gets(userInput);
+        char x = userInput[0];
+        if (strlen(userInput) == 1 && x - 48 == 1)
+        {
+            gotoxy(0, 8 + (rows - 1) * 2);
+            printf("                                                                                                                                      ");
+            break;
+        }
+    }
+}
+int inGameMenu(void)
+{
+    int choice;
+    char userInput[100];
+    while (1)
+    {
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("                                                                                                                                          ");
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("Please Enter [1]Resume....[2]Undo....[3]Redo....[4]Save....[5]Exit >> ");
+        gets(userInput);
+        char x = userInput[0];
+        if (strlen(userInput) == 1 && x - 48 >= 1 && x - 48 <= 5)
+        {
+            gotoxy(0, 8 + (rows - 1) * 2);
+            printf("                                                                                                                                      ");
+            choice = x - 48;
+            turn++;
+            break;
+        }
+    }
+    return (choice);
+}
+/*------------------------------------------undo and  redo----------------------------------------------*/
+void undo(void)
+{
+}
+void redo(void)
+{
 }
