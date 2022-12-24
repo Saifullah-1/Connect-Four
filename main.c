@@ -1,16 +1,18 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <windows.h>
+#include <time.h>
 #include "Menu.h"
 #include "GameLoop.h"
-//#include <time.h>
-
-//#include "SaveAndLoad.h"
-
-
+// #include "SaveAndLoad.h"
 int main_menu_choice = 1;
 int gameMode_menu_choice = 1;
+int ingame_menu_choice = 1;
 
 int main()
 {
-    mainmenu:
+mainmenu:
     reset();
     system("cls");
     frame(6);
@@ -37,26 +39,42 @@ int main()
             resetPlayerData();
             resetPlayerTurnArr();
             resetColumnFreeSpacesArr();
-            while (checkFreeSpaces()!=0)
+            printBoard();
+            playerData();
+            startGame();
+            while (checkFreeSpaces() != 0)
             {
-                //system("cls");
-                printBoard();
-                playerData();
                 playerMove();
                 int i = Player1.PlayerScore;
                 int j = Player2.PlayerScore;
-                checkScore();
                 Player1.PlayerScore -= i;
                 Player2.PlayerScore -= j;
                 int end = clock();
-                Time (start , end);
+                Time(start, end);
+                printBoard();
+                checkScore();
+                ingame_menu_choice = inGameMenu();
+                switch (ingame_menu_choice)
+                {
+                case 1:  //[1]Resume
+                    break;
+                case 2:  //[2]Undo
+
+                    break;
+                case 3:  //[3]Redo
+
+                    break;
+                case 4:  //[4]Save
+
+                    break;
+                case 5:   //[5]Exit
+                    goto mainmenu;
+                    break;
+                }
+                playerData();
             }
-            system("cls");
-            printBoard();
-            Instant_Save(Player1.PlayerScore,Player2.PlayerScore);
-            playerData();
+            Instant_Save(Player1.PlayerScore, Player2.PlayerScore);
             checkWinner();
-            gotoxy(0, 10 + (rows - 1) * 2);
             break;
         }
         break;
@@ -67,13 +85,14 @@ int main()
         /* code */
         break;
     case 4: //[4]Credit
-        credit:
+    credit:
         system("cls");
         yellow();
         printf("This Is Our Final Project 'Connect 4 Game'\nWe Wish You Enjoy Our Model.\n\nBY : Ahmed Ashraf & Saifullah Mousaad\n\n");
         printf("Please Press 0 To Visit Our GITHUB : https://github.com/Saifullah-1/Connect4\n");
         printf("OR Press 1 To Return To The Main Menu ... ");
-        int n;scanf("%i", &n);
+        int n;
+        scanf("%i", &n);
         if (n == 1)
         {
             goto mainmenu;
@@ -82,7 +101,8 @@ int main()
         {
             system("START https://github.com/Saifullah-1/Connect4");
             goto mainmenu;
-        }else
+        }
+        else
         {
             goto credit;
         }
