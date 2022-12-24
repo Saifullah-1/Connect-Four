@@ -22,7 +22,7 @@ void computerMove(void);
 void checkScore(void);
 void playerData(void);
 void checkWinner(void);
-void startGame(void);.
+void startGame(void);
 int inGameMenu(void);
 
 #endif
