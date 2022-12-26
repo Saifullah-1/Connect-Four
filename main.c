@@ -24,7 +24,7 @@ mainmenu:
     switch (main_menu_choice)
     {
     case 1:
-        system("cls");
+        //system("cls");
         // create a frame contains 2 rows (choices)
         frame(3);
         gameMode_menu_choice = gameMode();
@@ -35,29 +35,35 @@ mainmenu:
             break;
         case 2:
             system("cls");
-            int start = clock();
             resetBoard();
             resetPlayerData();
             resetPlayerTurnArr();
             resetColumnFreeSpacesArr();
+            resetUndoArray();
             printBoard();
             playerData();
             startGame();
+            int start = clock();
             while (checkFreeSpaces() != 0)
             {
+                int i, j;
                 // system("cls");
-                int i = Player1.PlayerScore;
-                int j = Player2.PlayerScore;
+                gamemenu:
+                i = Player1.PlayerScore;
+                j = Player2.PlayerScore;
                 ingame_menu_choice = inGameMenu();
                 switch (ingame_menu_choice)
                 {
                 case 1:
                     break;
                 case 2:
-
-                    break;
+                    undo(2);
+                    printBoard();
+                    checkScore();
+                    playerData();
+                    goto gamemenu;
                 case 3:
-
+                    
                     break;
                 case 4:
 
