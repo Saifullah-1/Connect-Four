@@ -13,6 +13,89 @@ int player_turn_arr[/*rows*columns+2*/ 4 * 4 + 2];
 int turn = 0;
 int ColumnFreeSpacesArr[/*columns*/ 4];
 
+/*int search(char a[], char b[]){
+    int count = -1,i=0;
+    while (b[i]!='\0')
+    {
+        int j = 0;
+        if (b[i]==a[j])
+        {
+            int k = 0;
+            while (b[k]==a[j]&&a[j]!='\0')
+            {
+                k++;
+                j++;
+            }
+            if (a[j]=='\0')
+            {
+                count = i;
+            }
+        }
+        i++;
+    }
+    return (count);
+}
+void XML(void){
+    char x, y[200]={'0'}, conf_start[]="<Configurations>", height_start[]="<Height>", width_start[]="<Width>", highscores_start="<Highscores>";
+    char conf_end[]="</Configurations>" ,height_end[]="</Height>", width_end[]="</Width>", highscores_end="</Highscores>";
+    FILE *file1 = fopen("parameters.xml", "r");
+    int i =0;
+    while ((x=fgetc(file1))!=EOF)
+    {
+        if (x!=' '&&x!='\n'&&x!='\t')
+        {
+            y[i] = x;
+            i++;
+        }
+    }
+    int start = search(conf_start, y);
+    int end = search(conf_end, y);
+    int size = end - start +1;
+    char arr[size];
+    for (int a = 0; a < size; a++)arr[a]=y[start+a];
+    int start_w = search(conf_start, y);
+    int end_w = search(conf_end, y);
+    char col[3];
+    col[0] = arr[start_w+7];
+    col[1] = arr[start_w+8];
+    col[2] = '\0';
+    int w, HS;
+    if (start_w!=-1&&end_w!=-1&&(end_w-start_w==8||end_w-start_w==9)&&atoi(col)>=4)
+    {
+        colmns = atoi(col);
+    }else
+    {
+        colmns = 7;
+    }
+    int start_h=search(height_start,arr);
+    int end_h=search(height_end,arr);
+    char row[3];
+    row[0] = arr[start_w+8];
+    row[1] = arr[start_w+9];
+    row[2] = '\0';
+    if (start_h!=-1&&end_h!=-1&&(end_h-start_h==9||end_h-start_h==10)&&atoi(row)>=4)
+    {
+        rows = atoi(row);
+    }else
+    {
+        rows = 9;
+    }
+    int start_hs=search(highscores_start,arr);
+    int end_hs=search(highscores_end,arr);
+    char score[3];
+    score[0] = arr[start_hs+12];
+    score[1] = arr[start_hs+13];
+    score[2] = '\0';
+    if (start_hs!=-1&&end_hs!=-1&&(end_hs-start_hs==13||end_h-start_h==14)&&atoi(score)>=1)
+    {
+        no_of_scores = atoi(score);
+    }else
+    {
+        no_of_scores = 10;
+    }
+    FILE *file2 = fclose(file1);
+}*/
+
 int hours, minutes, seconds;
 
 void SaveTop(char s[], int n)
@@ -97,6 +180,7 @@ void resetPlayerData(void)
     Player2.PlayerScore = 0;
     Player1.PlayerMoves = 0;
     Player2.PlayerMoves = 0;
+    turn = 0;
 }
 void resetBoard(void) // moves array
 {
@@ -202,12 +286,14 @@ void playerMove(void)
                 board[r][columnNumber - 1] = Player1Symbol;
                 Player1.PlayerMoves++;
                 ColumnFreeSpacesArr[columnNumber - 1]--;
+                turn++;
                 break;
             }
             else
             {
                 board[r][columnNumber - 1] = Player2Symbol;
                 Player2.PlayerMoves++;
+                turn++;
                 ColumnFreeSpacesArr[columnNumber - 1]--;
                 break;
             }
@@ -258,6 +344,15 @@ void checkScore(void)
         }
     }
     // DIAGONAL
+    /*  First Case
+        +---+---+---+
+        | x |   |   |
+        +---+---+---+
+        |   | x |   |
+        +---+---+---+
+        |   |   | x |
+        +---+---+---+
+    */
     for (int i = 0; i < rows - 3; i++)
     {
         for (int j = 0; j < colmns - 3; j++)
@@ -275,9 +370,18 @@ void checkScore(void)
             }
         }
     }
+    /* Second Case
+        +---+---+---+
+        |   |   | x |
+        +---+---+---+
+        |   | x |   |
+        +---+---+---+
+        | x |   |   |
+        +---+---+---+
+    */
     for (int i = 0; i < rows - 3; i++)
     {
-        for (int j = colmns - 3; j < colmns; j++)
+        for (int j = 3; j <= colmns - 1; j++)
         {
             if (board[i][j] == board[i + 1][j - 1] && board[i][j] == board[i + 2][j - 2] && board[i][j] == board[i + 3][j - 3])
             {
@@ -338,7 +442,7 @@ void checkWinner(void)
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
         red();
-        printf("Player1 Won! Please Enter Player1 Name : ");
+        printf("Player1 Won With score %i!\n Please Enter Player1 Name : ", Player1.PlayerScore);
         scanf("%s", Player1.PlayerName);
         SaveTop(Player1.PlayerName, Player1.PlayerScore);
     }
@@ -348,7 +452,7 @@ void checkWinner(void)
         printf("                                                                                                                            ");
         gotoxy(0, 8 + (rows - 1) * 2);
         LightBlue();
-        printf("Player2 Won! Please Enter Player2 Name : ");
+        printf("Player2 Won With score %i!\n Please Enter Player2 Name : ", Player2.PlayerScore);
         scanf("%s", Player2.PlayerName);
         SaveTop(Player2.PlayerName, Player2.PlayerScore);
     }
@@ -361,7 +465,6 @@ void checkWinner(void)
         printf("Draw! Please Enter Player1 Name : ");
         scanf("%s", Player1.PlayerName);
         SaveTop(Player1.PlayerName, Player1.PlayerScore);
-
         printf("\nPlease Enter Player2 Name : ");
         scanf("%s", Player2.PlayerName);
         SaveTop(Player2.PlayerName, Player2.PlayerScore);
@@ -395,10 +498,32 @@ int inGameMenu(void)
         gotoxy(0, 8 + (rows - 1) * 2);
         printf("                                                                                                                                          ");
         gotoxy(0, 8 + (rows - 1) * 2);
-        printf("Please Enter [1]Resume....[2]Undo....[3]Redo....[4]Save....[5]Exit >> ");
+        printf("Please Enter [1]Resume....[2]Undo....[3]Redo....[4]Save....[5]Main Menu >> ");
         gets(userInput);
         char x = userInput[0];
         if (strlen(userInput) == 1 && x - 48 >= 1 && x - 48 <= 5)
+        {
+            gotoxy(0, 8 + (rows - 1) * 2);
+            printf("                                                                                                                                      ");
+            choice = x - 48;
+            break;
+        }
+    }
+    return (choice);
+}
+int afterGame(void)
+{
+    int choice;
+    char userInput[100];
+    while (1)
+    {
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("                                                                                                                                          ");
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("Please Enter [1]Main Menu....[2]Exit >> ");
+        gets(userInput);
+        char x = userInput[0];
+        if (strlen(userInput) == 1 && x - 48 >= 1 && x - 48 <= 2)
         {
             gotoxy(0, 8 + (rows - 1) * 2);
             printf("                                                                                                                                      ");
@@ -409,7 +534,7 @@ int inGameMenu(void)
     }
     return (choice);
 }
-/*------------------------------------------undo and  redo----------------------------------------------*/
+/*------------------------------------------undo and redo----------------------------------------------*/
 void undo(void)
 {
 }
