@@ -432,7 +432,6 @@ void playerData(void)
     gotoxy(23 + (colmns)*4, 10);
     yellow();
     printf("Time passed: %02i:%02i:%02i", hours, minutes, seconds); // time function
-    reset();
 }
 void checkWinner(void)
 {
@@ -520,6 +519,14 @@ int afterGame(void)
         gotoxy(0, 8 + (rows - 1) * 2);
         printf("                                                                                                                                          ");
         gotoxy(0, 8 + (rows - 1) * 2);
+        if (player_turn_arr[turn] == 1)
+        {
+            red();
+        }
+        else
+        {
+            LightBlue();
+        }
         printf("Please Enter [1]Main Menu....[2]Exit >> ");
         gets(userInput);
         char x = userInput[0];
