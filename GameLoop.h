@@ -24,5 +24,9 @@ void playerData(void);
 void checkWinner(void);
 void startGame(void);
 int inGameMenu(void);
+int afterGame(void);
+void resetUndoArray(void);
+void undo(int game_mode);
+void redo(void);
 
 #endif
