@@ -9,6 +9,7 @@
 int main_menu_choice = 1;
 int gameMode_menu_choice = 1;
 int ingame_menu_choice = 1;
+int aftergame_menu_choice = 1;
 
 int main()
 {
@@ -44,37 +45,49 @@ mainmenu:
             startGame();
             while (checkFreeSpaces() != 0)
             {
-                playerMove();
+                // system("cls");
                 int i = Player1.PlayerScore;
                 int j = Player2.PlayerScore;
+                ingame_menu_choice = inGameMenu();
+                switch (ingame_menu_choice)
+                {
+                case 1:
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+                    goto mainmenu;
+                    break;
+                }
+                playerMove();
+                printBoard();
+                checkScore();
                 Player1.PlayerScore -= i;
                 Player2.PlayerScore -= j;
                 int end = clock();
                 Time(start, end);
-                printBoard();
-                checkScore();
-                ingame_menu_choice = inGameMenu();
-                switch (ingame_menu_choice)
-                {
-                case 1:  //[1]Resume
-                    break;
-                case 2:  //[2]Undo
-
-                    break;
-                case 3:  //[3]Redo
-
-                    break;
-                case 4:  //[4]Save
-
-                    break;
-                case 5:   //[5]Exit
-                    goto mainmenu;
-                    break;
-                }
                 playerData();
             }
             Instant_Save(Player1.PlayerScore, Player2.PlayerScore);
             checkWinner();
+            system("cls");
+            printBoard();
+            playerData();
+            aftergame_menu_choice = afterGame();
+            if (aftergame_menu_choice==1)
+            {
+                goto mainmenu;
+            }else
+            {
+                exit(-1);
+            }
             break;
         }
         break;
