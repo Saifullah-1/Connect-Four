@@ -5,7 +5,7 @@
 #include <time.h>
 #include "Menu.h"
 #include "GameLoop.h"
-// #include "SaveAndLoad.h"
+
 int main_menu_choice = 1;
 int gameMode_menu_choice = 1;
 int ingame_menu_choice = 1;
@@ -61,9 +61,11 @@ mainmenu:
                     printBoard();
                     checkScore();
                     playerData();
+                    int end = clock();
+                    Time(start, end);
                     goto gamemenu;
                 case 3:
-                    
+
                     break;
                 case 4:
 
