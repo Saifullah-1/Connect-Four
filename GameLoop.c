@@ -281,6 +281,11 @@ void playerMove(void)
         else
         {
             position_array[turn] = columnNumber;
+            for (int i=turn+1 ; i<rows*colmns ; i++)
+            {
+               position_array[i] = 0;
+            }
+            position_array[turn] = columnNumber;
             r = ColumnFreeSpacesArr[columnNumber - 1] - 1;
             if (player_turn_arr[turn] == 1)
             {
