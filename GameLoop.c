@@ -588,7 +588,7 @@ void undo(int game_mode)
 
 void redo(void)
 {
-    if (position_array[turn] != 0 && checkFreeSpaces() < colmns * rows)
+    if (position_array[turn] != 0 && checkFreeSpaces() <= colmns * rows)
     {
 
         int i = rows - 1;
