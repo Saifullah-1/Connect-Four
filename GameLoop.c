@@ -448,7 +448,7 @@ void checkWinner(void)
         gotoxy(0, 8 + (rows - 1) * 2);
         red();
         printf("Player1 Won With score %i!\n Please Enter Player1 Name : ", Player1.PlayerScore);
-        scanf("%s", Player1.PlayerName);
+        gets(Player1.PlayerName);
         SaveTop(Player1.PlayerName, Player1.PlayerScore);
     }
     else if (Player1.PlayerScore < Player2.PlayerScore)
@@ -458,7 +458,7 @@ void checkWinner(void)
         gotoxy(0, 8 + (rows - 1) * 2);
         LightBlue();
         printf("Player2 Won With score %i!\n Please Enter Player2 Name : ", Player2.PlayerScore);
-        scanf("%s", Player2.PlayerName);
+        gets(Player2.PlayerName);
         SaveTop(Player2.PlayerName, Player2.PlayerScore);
     }
     else
@@ -468,10 +468,10 @@ void checkWinner(void)
         gotoxy(0, 8 + (rows - 1) * 2);
         reset();
         printf("Draw! Please Enter Player1 Name : ");
-        scanf("%s", Player1.PlayerName);
+        gets(Player1.PlayerName);
         SaveTop(Player1.PlayerName, Player1.PlayerScore);
         printf("\nPlease Enter Player2 Name : ");
-        scanf("%s", Player2.PlayerName);
+        gets(Player2.PlayerName);
         SaveTop(Player2.PlayerName, Player2.PlayerScore);
     }
 }
