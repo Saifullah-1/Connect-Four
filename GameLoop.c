@@ -5,6 +5,7 @@
 #include <time.h>
 #include <ctype.h>
 #include "GameLoop.h"
+#include "Menu.c"
 
 int rows = 6;
 int colmns = 6;
@@ -13,6 +14,88 @@ int position_array[/*rows*colmns*/ 6 * 6];
 int player_turn_arr[/*rows*columns+2*/ 6 * 6 + 2];
 int turn = 0;
 int ColumnFreeSpacesArr[/*columns*/ 6];
+/*int search(char a[], char b[]){
+    int count = -1,i=0;
+    while (b[i]!='\0')
+    {
+        int j = 0;
+        if (b[i]==a[j])
+        {
+            int k = 0;
+            while (b[k]==a[j]&&a[j]!='\0')
+            {
+                k++;
+                j++;
+            }
+            if (a[j]=='\0')
+            {
+                count = i;
+            }
+        }
+        i++;
+    }
+    return (count);
+}
+void XML(void){
+    char x, y[200]={'0'}, conf_start[]="<Configurations>", height_start[]="<Height>", width_start[]="<Width>", highscores_start="<Highscores>";
+    char conf_end[]="</Configurations>" ,height_end[]="</Height>", width_end[]="</Width>", highscores_end="</Highscores>";
+    FILE *file1 = fopen("parameters.xml", "r");
+    int i =0;
+    while ((x=fgetc(file1))!=EOF)
+    {
+        if (x!=' '&&x!='\n'&&x!='\t')
+        {
+            y[i] = x;
+            i++;
+        }
+    }
+    int start = search(conf_start, y);
+    int end = search(conf_end, y);
+    int size = end - start +1;
+    char arr[size];
+    for (int a = 0; a < size; a++)arr[a]=y[start+a];
+    int start_w = search(conf_start, y);
+    int end_w = search(conf_end, y);
+    char col[3];
+    col[0] = arr[start_w+7];
+    col[1] = arr[start_w+8];
+    col[2] = '\0';
+    int w, HS;
+    if (start_w!=-1&&end_w!=-1&&(end_w-start_w==8||end_w-start_w==9)&&atoi(col)>=4)
+    {
+        colmns = atoi(col);
+    }else
+    {
+        colmns = 7;
+    }
+    int start_h=search(height_start,arr);
+    int end_h=search(height_end,arr);
+    char row[3];
+    row[0] = arr[start_w+8];
+    row[1] = arr[start_w+9];
+    row[2] = '\0';
+    if (start_h!=-1&&end_h!=-1&&(end_h-start_h==9||end_h-start_h==10)&&atoi(row)>=4)
+    {
+        rows = atoi(row);
+    }else
+    {
+        rows = 9;
+    }
+    int start_hs=search(highscores_start,arr);
+    int end_hs=search(highscores_end,arr);
+    char score[3];
+    score[0] = arr[start_hs+12];
+    score[1] = arr[start_hs+13];
+    score[2] = '\0';
+    if (start_hs!=-1&&end_hs!=-1&&(end_hs-start_hs==13||end_h-start_h==14)&&atoi(score)>=1)
+    {
+        no_of_scores = atoi(score);
+    }else
+    {
+        no_of_scores = 10;
+    }
+    FILE *file2 = fclose(file1);
+}*/
 
 int hours, minutes, seconds;
 void SaveTop(char s[], int n)
@@ -488,6 +571,7 @@ void undo(int game_mode)
                     Player2.PlayerMoves--;
                 }
                 board[i][j] = ' ';
+                //position_array[turn - 1] = 0;
                 turn--;
                 ColumnFreeSpacesArr[j]++;
                 break;
@@ -496,27 +580,35 @@ void undo(int game_mode)
         }
     }
 }
+
 void redo(void)
 {
-    if (position_array[turn + 1] != 0)
+    if (position_array[turn] != 0 && checkFreeSpaces() < colmns * rows)
     {
+
         int i = rows - 1;
-        int j = position_array[turn + 1] - 1;
+        int j = position_array[turn] - 1;
         while (i >= 0)
         {
-            if (board[i][j] != ' ' && board[i - 1][j] == ' ')
+            if ( board[i][j] == ' ')
             {
-                if (player_turn_arr[turn + 1] == 1)
+                if (player_turn_arr[turn] == 1)
                 {
                     board[i][j] = Player1Symbol;
+                    Player1.PlayerMoves++;
                 }
                 else
                 {
                     board[i][j] = Player2Symbol;
+                    Player2.PlayerMoves++;
                 }
                 turn++;
                 ColumnFreeSpacesArr[j]--;
+                break;
             }
+        i--;
         }
     }
+Player1.PlayerScore = 0;
+Player2.PlayerScore = 0;
 }
