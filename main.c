@@ -44,6 +44,7 @@ mainmenu:
             playerData();
             startGame();
             int start = clock();
+            int end;
             while (checkFreeSpaces() != 0)
             {
                 int i, j;
@@ -61,11 +62,17 @@ mainmenu:
                     printBoard();
                     checkScore();
                     playerData();
-                    int end = clock();
+                    end = clock();
                     Time(start, end);
                     goto gamemenu;
                 case 3:
-
+                    redo();
+                    printBoard();
+                    checkScore();
+                    playerData();
+                    end = clock();
+                    Time(start, end);
+                    goto gamemenu;
                     break;
                 case 4:
 
