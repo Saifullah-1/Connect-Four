@@ -42,7 +42,7 @@ mainmenu:
         {
         case 1:
             resetPlayerTurnArr(3);
-            
+            break;
         case 2:
             resetPlayerTurnArr(2);
             playerData();
@@ -50,7 +50,7 @@ mainmenu:
             start = clock();
             while (checkFreeSpaces() != 0)
             {
-            gamemenu2:
+            gamemenu:
                 i = Player1.PlayerScore;
                 j = Player2.PlayerScore;
                 ingame_menu_choice = inGameMenu();
@@ -65,7 +65,7 @@ mainmenu:
                     playerData();
                     end = clock();
                     Time(start, end);
-                    goto gamemenu2;
+                    goto gamemenu;
                 case 3:
                     redo();
                     printBoard();
@@ -73,7 +73,7 @@ mainmenu:
                     playerData();
                     end = clock();
                     Time(start, end);
-                    goto gamemenu2;
+                    goto gamemenu;
                     break;
                 case 4:
 
