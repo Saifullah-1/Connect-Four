@@ -6,14 +6,17 @@
 #include "Menu.h"
 #include "GameLoop.h"
 
-int main_menu_choice = 1;
-int gameMode_menu_choice = 1;
-int ingame_menu_choice = 1;
-int aftergame_menu_choice = 1;
-
 int main()
 {
+    int main_menu_choice;
+    int gameMode_menu_choice;
+    int ingame_menu_choice;
+    int aftergame_menu_choice;
 mainmenu:
+    main_menu_choice = 1;
+    gameMode_menu_choice = 1;
+    ingame_menu_choice = 1;
+    aftergame_menu_choice = 1;
     reset();
     system("cls");
     frame(6);
@@ -24,32 +27,30 @@ mainmenu:
     switch (main_menu_choice)
     {
     case 1:
-        //system("cls");
-        // create a frame contains 2 rows (choices)
+        //  create a frame contains 2 rows (choices)
         frame(3);
         gameMode_menu_choice = gameMode();
+        system("cls");
+        resetBoard();
+        resetPlayerData();
+        resetColumnFreeSpacesArr();
+        resetUndoArray();
+        printBoard();
+        int start;
+        int end, i, j;
         switch (gameMode_menu_choice)
         {
         case 1:
-
-            break;
+            resetPlayerTurnArr(3);
+            
         case 2:
-            system("cls");
-            resetBoard();
-            resetPlayerData();
-            resetPlayerTurnArr();
-            resetColumnFreeSpacesArr();
-            resetUndoArray();
-            printBoard();
+            resetPlayerTurnArr(2);
             playerData();
             startGame();
-            int start = clock();
-            int end;
+            start = clock();
             while (checkFreeSpaces() != 0)
             {
-                int i, j;
-                // system("cls");
-                gamemenu:
+            gamemenu2:
                 i = Player1.PlayerScore;
                 j = Player2.PlayerScore;
                 ingame_menu_choice = inGameMenu();
@@ -64,7 +65,7 @@ mainmenu:
                     playerData();
                     end = clock();
                     Time(start, end);
-                    goto gamemenu;
+                    goto gamemenu2;
                 case 3:
                     redo();
                     printBoard();
@@ -72,7 +73,7 @@ mainmenu:
                     playerData();
                     end = clock();
                     Time(start, end);
-                    goto gamemenu;
+                    goto gamemenu2;
                     break;
                 case 4:
 
@@ -86,20 +87,22 @@ mainmenu:
                 checkScore();
                 Player1.PlayerScore -= i;
                 Player2.PlayerScore -= j;
-                int end = clock();
+                end = clock();
                 Time(start, end);
                 playerData();
             }
             Instant_Save(Player1.PlayerScore, Player2.PlayerScore);
             checkWinner();
-            system("cls");
-            printBoard();
-            playerData();
+            reset();
+            // system("cls");
+            // printBoard();
+            // playerData();
             aftergame_menu_choice = afterGame();
-            if (aftergame_menu_choice==1)
+            if (aftergame_menu_choice == 1)
             {
                 goto mainmenu;
-            }else
+            }
+            else
             {
                 exit(-1);
             }
@@ -117,8 +120,9 @@ mainmenu:
         system("cls");
         yellow();
         printf("This Is Our Final Project 'Connect 4 Game'\nWe Wish You Enjoy Our Model.\n\nBY : Ahmed Ashraf & Saifullah Mousaad\n\n");
-        printf("Please Press 0 To Visit Our GITHUB : https://github.com/Saifullah-1/Connect4\n");
-        printf("OR Press 1 To Return To The Main Menu ... ");
+        reset();
+        printf("Please Enter [0] To Visit Our GITHUB : https://github.com/Saifullah-1/Connect4\n");
+        printf("OR Enter [1] To Return To The Main Menu ... ");
         int n;
         scanf("%i", &n);
         if (n == 1)
@@ -134,7 +138,6 @@ mainmenu:
         {
             goto credit;
         }
-
         break;
     case 5:
         exit(-1);
