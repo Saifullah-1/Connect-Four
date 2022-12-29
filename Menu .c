@@ -1,5 +1,5 @@
 #include "Menu.h"
-int no_of_scores = 10;//read from xml file
+int no_of_scores=10;//read from xml file
 
 
 void red (void) {
@@ -60,10 +60,9 @@ void ShowConsoleCursor(int showFlag)
 int menu(void)
 {
     ShowConsoleCursor(0);
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
     int pos = 1;
     char ch;
-    SetConsoleTextAttribute(console, 9);gotoxy(56, 10);printf("Main Menu");
+    LightBlue();gotoxy(56, 10);printf("Main Menu");
     do
     {
         reset();
@@ -105,10 +104,9 @@ int menu(void)
 int gameMode(void)
 {
     ShowConsoleCursor(0);
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
     int pos = 1;
     char ch;
-    SetConsoleTextAttribute(console, 9);gotoxy(56, 10);printf("Game Mode");
+    LightBlue();gotoxy(56, 10);printf("Game Mode");
     do
     {
         reset();
@@ -134,4 +132,47 @@ int gameMode(void)
         }
     } while (ch != 13);
     return (pos);
+}
+int loadMenu(void)
+{
+    int choice;
+    char userInput[100];
+    gotoxy(45,10);LightBlue();
+    printf("Loading Menu");
+    while (1)
+    {
+        reset();
+        gotoxy(10, 15);
+        printf("                                                                                                                                          ");
+        gotoxy(10, 15);
+        printf("Please Enter The File You Want To Load [1]File 1....[2]File 2....[3]File 3 >> ");
+        gets(userInput);
+        char x = userInput[0];
+        if (strlen(userInput) == 1 && x - 48 >= 1 && x - 48 <= 3)
+        {
+            gotoxy(0, 15);
+            printf("                                                                                                                                      ");
+            choice = x - 48;
+            break;
+        }
+    }
+    return (choice);
+}
+void credit(void){
+        system("cls");
+        yellow();
+        printf("This Is Our Final Project 'Connect 4 Game'\nWe Wish You Enjoy Our Model.\n\nBY : Ahmed Ashraf & Saifullah Mousaad\n\n");
+        reset();
+        printf("Please Enter [0] To Visit Our GITHUB : https://github.com/Saifullah-1/Connect4\n");
+        printf("OR Enter [1] To Return To The Main Menu ... ");
+        int n;
+        scanf("%i", &n);
+        if (n == 0)
+        {
+            system("START https://github.com/Saifullah-1/Connect4");
+        }
+        else if (n !=0&&n!=1)
+        {
+            credit();
+        }
 }
