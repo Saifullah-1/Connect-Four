@@ -21,7 +21,7 @@ void file_save(int file_number,int r , int c , int position[r*c], int turn , int
         fwrite(&score2,sizeof(score2),1, p);
 
         fwrite(&turn,sizeof(turn),1, p);
-        
+
         fclose (p);
     }
     else if (file_number == 2)
@@ -42,7 +42,7 @@ void file_save(int file_number,int r , int c , int position[r*c], int turn , int
         fwrite(&score2,sizeof(score2),1, p);
 
         fwrite(&turn,sizeof(turn),1, p);
-        
+
         fclose (p);
     }
     else if (file_number == 3)
@@ -63,7 +63,7 @@ void file_save(int file_number,int r , int c , int position[r*c], int turn , int
         fwrite(&score2,sizeof(score2),1, p);
 
         fwrite(&turn,sizeof(turn),1, p);
-        
+
         fclose (p);
     }
 }
@@ -74,20 +74,20 @@ void Load ()                     // Save File 1
 {
     FILE *pr;
     pr = fopen("SaveGame1.txt","rb");
-    for (int i=0 ; i<r*c ; i++)
+    for (int i=0 ; i<rows*colmns ; i++)
     {
-            fread(&position_array[i],sizeof(position_array[i]),1,p);
+            fread(&position_array[i],sizeof(position_array[i]),1,pr);
     }
-    for (int i=0 ; i<r*c ; i++)
+    for (int i=0 ; i<rows*colmns ; i++)
     {
-            fread(&board[i],sizeof(board[i]),1,p);
+            fread(&board[i],sizeof(board[i]),1,pr);
     }
-    fwrite(&Player1.PlayerMoves,sizeof(Player1.PlayerMoves),1, p);
-    fwrite(&Player2.PlayerMoves,sizeof(Player2.PlayerMoves),1, p);
-    fwrite(&Player1.PlayerScore,sizeof(Player1.PlayerScore),1, p);
-    fwrite(&Player2.PlayerScore,sizeof(Player2.PlayerScore),1, p);
-    
-    fwrite(&turn,sizeof(turn),1, p);
-    
+    fwrite(&Player1.PlayerMoves,sizeof(Player1.PlayerMoves),1, pr);
+    fwrite(&Player2.PlayerMoves,sizeof(Player2.PlayerMoves),1, pr);
+    fwrite(&Player1.PlayerScore,sizeof(Player1.PlayerScore),1, pr);
+    fwrite(&Player2.PlayerScore,sizeof(Player2.PlayerScore),1, pr);
+
+    fwrite(&turn,sizeof(turn),1, pr);
+
     fclose(pr);
 }
