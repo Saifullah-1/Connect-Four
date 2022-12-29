@@ -14,4 +14,6 @@ void frame(int h);
 void ShowConsoleCursor(int showFlag);
 int menu(void);
 int gameMode(void);
+int loadMenu(void);
+void credit(void);
 #endif
