@@ -6,6 +6,8 @@
 #include "Menu.h"
 #include "GameLoop.h"
 #include "SaveAndLoad.h"
+#include "Menu.c"
+
 
 void main()
 {
@@ -84,13 +86,13 @@ mainmenu:
                     switch (save_menu_choice)
                     {
                     case 1:
-                        file_save(1);
+                        file_save(1,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board);
                         break;
                     case 2:
-                        file_save(2);
+                        file_save(2,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board);
                         break;
                     case 3:
-                        file_save(3);
+                        file_save(3,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board);
                         break;
                     }
                     break;
