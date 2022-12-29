@@ -16,12 +16,14 @@ void main()
     int ingame_menu_choice;
     int aftergame_menu_choice;
     int save_menu_choice;
+    int load_menu_choice;
 mainmenu:
     main_menu_choice = 1;
     gameMode_menu_choice = 1;
     ingame_menu_choice = 1;
     aftergame_menu_choice = 1;
     save_menu_choice = 1;
+    load_menu_choice = 1;
     reset();
     system("cls");
     frame(6);
