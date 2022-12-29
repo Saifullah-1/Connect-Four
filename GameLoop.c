@@ -33,7 +33,6 @@ void SaveTop(char s[], int n)
     }
     fprintf(Ptop, " : %d\n", n);
     fclose(Ptop);
-    return 0;
 }
 
 void Time(int start, int end)
@@ -65,7 +64,7 @@ void TopScores(char name[], int s) // s refers To Player's Score
 {
     FILE *Pscores;
     Pscores = fopen("Scores.txt", "a");
-    printf("%c\t%d", name, s);
+    printf("%s\t%d", name, s);
     fclose(Pscores);
 }
 
@@ -218,7 +217,7 @@ void playerMove(void)
                 turn++;
                 break;
             }
-            else if(player_turn_arr[turn] == 2)
+            else if (player_turn_arr[turn] == 2)
             {
                 board[r][columnNumber - 1] = Player2Symbol;
                 Player2.PlayerMoves++;
@@ -233,23 +232,26 @@ void playerMove(void)
 // VS computer
 void computerMove(void)
 {
-    int found = 0;
+    /*int found = 0;
     if (turn == 1)
     {
         if (position_array[0] <= colmns - 3)
         {
             board[rows - 1][position_array[0]] = Player2Symbol;
-            turn++;Player2.PlayerMoves++;
+            turn++;
+            Player2.PlayerMoves++;
         }
         else if (position_array[0] >= 4)
         {
             board[rows - 1][position_array[0] - 2] = Player2Symbol;
-            turn++;Player2.PlayerMoves++;
+            turn++;
+            Player2.PlayerMoves++;
         }
         else
         {
             board[rows - 2][position_array[0] - 1] = Player2Symbol;
-            turn++;Player2.PlayerMoves++;
+            turn++;
+            Player2.PlayerMoves++;
         }
     }
     else
@@ -267,13 +269,15 @@ void computerMove(void)
                         {
                             board[i][j + 3] = Player2Symbol;
                             turn++;
-                            found = 1;Player2.PlayerMoves++;
+                            found = 1;
+                            Player2.PlayerMoves++;
                         }
                         else if ((j - 1) >= 0 && board[i][j - 1] == ' ')
                         {
                             board[i][j - 1] = Player2Symbol;
                             turn++;
-                            found = 1;Player2.PlayerMoves++;
+                            found = 1;
+                            Player2.PlayerMoves++;
                         }
                     }
                 }
@@ -290,13 +294,15 @@ void computerMove(void)
                     {
                         board[i][j + 1] == Player2Symbol;
                         turn++;
-                        found = 1;Player2.PlayerMoves++;
+                        found = 1;
+                        Player2.PlayerMoves++;
                     }
                     else if (j > 0 && board[i][j] == Player2Symbol && board[i][j - 1] == ' ')
                     {
                         board[i][j - 1] == Player2Symbol;
                         turn++;
-                        found = 1;Player2.PlayerMoves++;
+                        found = 1;
+                        Player2.PlayerMoves++;
                     }
                 }
             }
@@ -315,7 +321,8 @@ void computerMove(void)
                         {
                             board[i][j - 1] == Player2Symbol;
                             turn++;
-                            found = 1;Player2.PlayerMoves++;
+                            found = 1;
+                            Player2.PlayerMoves++;
                         }
                     }
                 }
@@ -332,13 +339,14 @@ void computerMove(void)
                     {
                         board[i][j + 1] == Player2Symbol;
                         turn++;
-                        found = 1;Player2.PlayerMoves++;
+                        found = 1;
+                        Player2.PlayerMoves++;
                     }
                 }
             }
             break;
         }
-    }
+    }*/
 }
 
 void checkScore(void)
@@ -492,7 +500,7 @@ void checkWinner(void)
             printf("                                                                                                                            ");
             gotoxy(0, 8 + (rows - 1) * 2);
             printf("Player1 Won With score %i!\n Please Enter Player1 Name : ", Player1.PlayerScore);
-            fgets(Player1.PlayerName, 101, stdin);
+            gets(Player1.PlayerName);
             if (strlen(Player1.PlayerName) != 1)
             {
                 SaveTop(Player1.PlayerName, Player1.PlayerScore);
@@ -509,7 +517,7 @@ void checkWinner(void)
         while (1)
         {
             printf("Player2 Won With score %i!\n Please Enter Player2 Name : ", Player2.PlayerScore);
-            fgets(Player2.PlayerName, 101, stdin);
+            gets(Player2.PlayerName);
             if (strlen(Player2.PlayerName) != 1)
             {
                 SaveTop(Player2.PlayerName, Player2.PlayerScore);
@@ -603,6 +611,32 @@ int inGameMenu(void) // The Player Choose Either [1]Resume , [2]Undo , [3]Redo ,
     }
     return (choice);
 }
+int saveMenu(void)
+{
+    int choice;
+    char userInput[100];
+    while (1)
+    {
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("                                                                                                                                          ");
+        gotoxy(0, 9 + (rows - 1) * 2);
+        printf("                                                                                                                                          ");
+        gotoxy(0, 10 + (rows - 1) * 2);
+        printf("                                                                                                                                          ");
+        gotoxy(0, 8 + (rows - 1) * 2);
+        printf("Please Enter The File You Will Save In  [1]File 1....[2]File 2....[3]File 3 >> ");
+        gets(userInput);
+        char x = userInput[0];
+        if (strlen(userInput) == 1 && x - 48 >= 1 && x - 48 <= 3)
+        {
+            gotoxy(0, 8 + (rows - 1) * 2);
+            printf("                                                                                                                                      ");
+            choice = x - 48;
+            break;
+        }
+    }
+    return (choice);
+}
 int afterGame(void) // The Player Chooses After The Game End Either [1]Main Menu Or [2]Exit
 {
     int choice;
@@ -642,60 +676,117 @@ void undo(int game_mode)
 {
     if (checkFreeSpaces() < colmns * rows)
     {
-        int j = position_array[turn - 1] - 1;
-        int i = 0;
-        while (i < rows)
+        if (game_mode == 2) // vsHuman mode
         {
-            if (board[i][j] != ' ')
+            int j = position_array[turn - 1] - 1;
+            int i = 0;
+            while (i < rows)
             {
-                Player1.PlayerScore = 0;
-                Player2.PlayerScore = 0;
-                if (board[i][j] == Player1Symbol)
+                if (board[i][j] != ' ')
                 {
-                    Player1.PlayerMoves--;
+                    Player1.PlayerScore = 0;
+                    Player2.PlayerScore = 0;
+                    if (board[i][j] == Player1Symbol)
+                    {
+                        Player1.PlayerMoves--;
+                    }
+                    else
+                    {
+                        Player2.PlayerMoves--;
+                    }
+                    board[i][j] = ' ';
+                    // position_array[turn - 1] = 0;
+                    turn--;
+                    ColumnFreeSpacesArr[j]++;
+                    break;
                 }
-                else
-                {
-                    Player2.PlayerMoves--;
-                }
-                board[i][j] = ' ';
-                // position_array[turn - 1] = 0;
-                turn--;
-                ColumnFreeSpacesArr[j]++;
-                break;
+                i++;
             }
-            i++;
         }
+        /*else if (game_mode == 1 && turn >= 2) // vsComputer mode
+        {
+            int l = position_array[turn - 1] - 1;
+            int m = position_array[turn - 2] - 1;
+            int k = 0;
+            while (k < rows)
+            {
+                if (board[k][l] != ' ' && board[k][m] != ' ')
+                {
+                    if (board[k][l] == Player1Symbol)
+                    {
+                        board[k][l] = ' ';
+                    }
+                    else if (board[k][m] == Player2Symbol)
+                    {
+                        board[k][m] = ' ';
+                    }
+                    Player1.PlayerScore = 0;
+                    Player2.PlayerScore = 0;
+                    Player1.PlayerMoves--;
+                    Player2.PlayerMoves--;
+                    // position_array[turn - 1] = 0;
+                    turn -= 2;
+                    ColumnFreeSpacesArr[l]++;
+                    ColumnFreeSpacesArr[m]++;
+                    break;
+                }
+                k++;
+            }
+        }*/
     }
 }
-
-void redo(void)
+void redo(int game_mode)
 {
     if (position_array[turn] != 0 && checkFreeSpaces() <= colmns * rows)
     {
-        int i = rows - 1;
-        int j = position_array[turn] - 1;
-        while (i >= 0)
+        if (game_mode == 2)
         {
-            if (board[i][j] == ' ')
+            int i = rows - 1;
+            int j = position_array[turn] - 1;
+            while (i >= 0)
             {
-                if (player_turn_arr[turn] == 1)
+                if (board[i][j] == ' ')
                 {
-                    board[i][j] = Player1Symbol;
-                    Player1.PlayerMoves++;
+                    if (player_turn_arr[turn] == 1)
+                    {
+                        board[i][j] = Player1Symbol;
+                        Player1.PlayerMoves++;
+                    }
+                    else
+                    {
+                        board[i][j] = Player2Symbol;
+                        Player2.PlayerMoves++;
+                    }
+                    turn++;
+                    ColumnFreeSpacesArr[j]--;
+                    break;
                 }
-                else
+                i--;
+            }
+        }
+        /*else if (game_mode == 1)
+        {
+            int k = rows - 1;
+            int l = position_array[turn] - 1;
+            int m = position_array[turn + 1] - 1;
+            while (k >= 0)
+            {
+                if (board[k][l] == ' ' && board[k][m] == ' ')
                 {
-                    board[i][j] = Player2Symbol;
+                    board[k][l] = Player1Symbol;
+                    Player1.PlayerMoves++;
+                    board[k][m] = Player2Symbol;
                     Player2.PlayerMoves++;
                 }
-                turn++;
-                ColumnFreeSpacesArr[j]--;
+                turn += 2;
+                ColumnFreeSpacesArr[l]--;
+                ColumnFreeSpacesArr[m]--;
                 break;
             }
-            i--;
+            k--;
         }
+    }*/
+        Player1.PlayerScore = 0;
+        Player2.PlayerScore = 0;
     }
-    Player1.PlayerScore = 0;
-    Player2.PlayerScore = 0;
 }
