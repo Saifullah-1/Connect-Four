@@ -35,6 +35,20 @@ void SaveTop(char s[], int n)
     fclose(Ptop);
 }
 
+void CheckPlaces()
+{
+    for (int i=0 ; i<colmns ; i++)
+    {
+        for (int j =0 ; j<rows ; j++)
+        {
+            if (board[j][i] == ' ')
+            {
+                ColumnFreeSpacesArr[i] += 1;
+            }
+        }
+    }
+}
+
 void Time(int start, int end)
 {
     seconds = (end - start) / CLOCKS_PER_SEC;
