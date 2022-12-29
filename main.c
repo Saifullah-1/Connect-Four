@@ -8,6 +8,8 @@
 #include "SaveAndLoad.h"
 #include "Menu.c"
 
+int t=0 ;
+
 void main()
 {
     int main_menu_choice;
@@ -73,7 +75,7 @@ mainmenu:
                     printBoard();
                     checkScore();
                     playerData();
-                    end = clock();
+                    end = clock() + t;
                     Time(start, end);
                     goto gamemenu;
                 case 3:
@@ -81,7 +83,7 @@ mainmenu:
                     printBoard();
                     checkScore();
                     playerData();
-                    end = clock();
+                    end = clock() + t;
                     Time(start, end);
                     goto gamemenu;
                     break;
@@ -109,7 +111,7 @@ mainmenu:
                 checkScore();
                 Player1.PlayerScore -= i;
                 Player2.PlayerScore -= j;
-                end = clock();
+                end = clock() + t;
                 Time(start, end);
                 playerData();
             }
@@ -139,32 +141,72 @@ mainmenu:
             resetBoard();
             printBoard();
             resetPlayerData();
-            //resetColumnFreeSpacesArr();
             resetUndoArray();
             ShowConsoleCursor(1);
             resetPlayerTurnArr(2);
             playerData();
             startGame();
-            Load();
+            Load(1);
             printBoard();
             playerData();
             Player1.PlayerMoves = info[0];
             Player2.PlayerMoves = info[1];
             Player1.PlayerScore = info[2];
-            Player1.PlayerScore = info[3];
+            Player2.PlayerScore = info[3];
             turn = info [4];
+            t = info[5];
             CheckPlaces();
-
+            playerData();
 
             goto afterload;
-
-
             break;
 
-        case 2: //[2]File 2
+        case 2:
+            resetBoard();
+            printBoard();
+            resetPlayerData();
+            resetUndoArray();
+            ShowConsoleCursor(1);
+            resetPlayerTurnArr(2);
+            playerData();
+            startGame();
+            Load(2);
+            printBoard();
+            playerData();
+            Player1.PlayerMoves = info[0];
+            Player2.PlayerMoves = info[1];
+            Player1.PlayerScore = info[2];
+            Player2.PlayerScore = info[3];
+            turn = info [4];
+            t = info[5];
+            CheckPlaces();
+            playerData();
+
+            goto afterload;
             break;
+
         case 3: //[3]File 3
+            resetBoard();
+            printBoard();
+            resetPlayerData();
+            resetUndoArray();
+            ShowConsoleCursor(1);
+            resetPlayerTurnArr(2);
+            playerData();
+            startGame();
+            Load(3);
+            printBoard();
+            playerData();
+            Player1.PlayerMoves = info[0];
+            Player2.PlayerMoves = info[1];
+            Player1.PlayerScore = info[2];
+            Player2.PlayerScore = info[3];
+            turn = info [4];
+            t = info[5];
+            CheckPlaces();
+            playerData();
 
+            goto afterload;
             break;
         }
         break;
