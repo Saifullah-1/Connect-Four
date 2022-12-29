@@ -128,34 +128,27 @@ mainmenu:
         }
         break;
     case 2:
-        /* code */
+        ShowConsoleCursor(1);
+        load_menu_choice = loadMenu();
+        switch (load_menu_choice)
+        {
+        case 1: //[1]File 1
+            /* code */
+            break;
+
+        case 2: //[2]File 2
+            break;
+        case 3: //[3]File 3
+
+            break;
+        }
         break;
     case 3:
         /* code */
         break;
     case 4: //[4]Credit
-    credit:
-        system("cls");
-        yellow();
-        printf("This Is Our Final Project 'Connect 4 Game'\nWe Wish You Enjoy Our Model.\n\nBY : Ahmed Ashraf & Saifullah Mousaad\n\n");
-        reset();
-        printf("Please Enter [0] To Visit Our GITHUB : https://github.com/Saifullah-1/Connect4\n");
-        printf("OR Enter [1] To Return To The Main Menu ... ");
-        int n;
-        scanf("%i", &n);
-        if (n == 1)
-        {
-            goto mainmenu;
-        }
-        else if (n == 0)
-        {
-            system("START https://github.com/Saifullah-1/Connect4");
-            goto mainmenu;
-        }
-        else
-        {
-            goto credit;
-        }
+        credit();
+        goto mainmenu;
         break;
     case 5:
         exit(-1);
