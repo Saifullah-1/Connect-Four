@@ -138,6 +138,14 @@ mainmenu:
         switch (load_menu_choice)
         {
         case 1: //[1]File 1
+            Load(1);
+            if (ok==0)
+            {
+             printf("There Is No Saved File In This Slot");
+                 break;
+            }
+            else if(ok==1)
+                {
             resetBoard();
             printBoard();
             resetPlayerData();
@@ -160,8 +168,17 @@ mainmenu:
 
             goto afterload;
             break;
+            }
 
         case 2:
+            Load(2);
+            if (ok==0)
+            {
+             printf("There Is No Saved File In This Slot");
+                 break;
+            }
+            else if(ok==1)
+                {
             resetBoard();
             printBoard();
             resetPlayerData();
@@ -184,8 +201,17 @@ mainmenu:
 
             goto afterload;
             break;
+            }
 
         case 3: //[3]File 3
+            Load(3);
+            if (ok==0)
+            {
+             printf("There Is No Saved File In This Slot");
+                 break;
+            }
+            else if(ok==1)
+                {
             resetBoard();
             printBoard();
             resetPlayerData();
@@ -208,6 +234,7 @@ mainmenu:
 
             goto afterload;
             break;
+            }
         }
         break;
     case 3:
