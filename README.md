@@ -7,3 +7,4 @@
 
 
 ### Try the game [game.exe](https://github.com/Saifullah-1/Connect4/blob/C4/Connect4.exe)
+### For more information [Report](https://github.com/Saifullah-1/Connect4/blob/C4/Connect.pdf)
