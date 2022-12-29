@@ -4,7 +4,7 @@
 
 
 int info[6]={0};
-
+int ok;
 void file_save(int file_number,int r , int c , int position[r*c], int turn , int moves1 ,int moves2 ,int score1 ,int  score2 , char grid[r][c] , int t)
 {
     if (file_number == 1)
@@ -83,6 +83,10 @@ void Load (int slot)                     // Save File 1
     {
     FILE* p;
     p=fopen ("SaveGame1.txt","rb");
+    if(p == NULL)
+        ok=0;
+    else if(p != NULL){
+    ok=1;
     for (int i =0 ; i<rows*colmns ; i++)
     {
         fread(&position_array[i],sizeof(position_array[i]),1,p);
@@ -98,6 +102,7 @@ void Load (int slot)                     // Save File 1
             for (int j=0 ; j<colmns ; j++)
                 fread(&board[i][j],sizeof(board[i][j]),1,p);
         }
+    }
     fclose(p);
     }
 
@@ -106,6 +111,10 @@ void Load (int slot)                     // Save File 1
     {
     FILE* p;
     p=fopen ("SaveGame2.txt","rb");
+    if(p == NULL)
+        ok=0;
+    else if(p != NULL){
+    ok=1;
     for (int i =0 ; i<rows*colmns ; i++)
     {
         fread(&position_array[i],sizeof(position_array[i]),1,p);
@@ -121,6 +130,7 @@ void Load (int slot)                     // Save File 1
             for (int j=0 ; j<colmns ; j++)
                 fread(&board[i][j],sizeof(board[i][j]),1,p);
         }
+    }
     fclose(p);
     }
 
@@ -129,6 +139,10 @@ void Load (int slot)                     // Save File 1
     {
     FILE* p;
     p=fopen ("SaveGame3.txt","rb");
+    if(p == NULL)
+        ok=0;
+    else if(p != NULL){
+    ok=1;
     for (int i =0 ; i<rows*colmns ; i++)
     {
         fread(&position_array[i],sizeof(position_array[i]),1,p);
@@ -144,6 +158,7 @@ void Load (int slot)                     // Save File 1
             for (int j=0 ; j<colmns ; j++)
                 fread(&board[i][j],sizeof(board[i][j]),1,p);
         }
+    }
     fclose(p);
     }
 }
