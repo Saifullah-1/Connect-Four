@@ -95,10 +95,10 @@ mainmenu:
                         file_save(1,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board ,end);
                         break;
                     case 2:
-                        //file_save(2,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board);
+                        file_save(2,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board ,end);
                         break;
                     case 3:
-                        //file_save(3,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board);
+                        file_save(3,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board ,end);
                         break;
                     }
                     break;
@@ -141,8 +141,17 @@ mainmenu:
             Load(1);
             if (ok==0)
             {
-             printf("There Is No Saved File In This Slot");
-                 break;
+                int check=0 ;
+                do
+                {
+                    system("cls");
+                    printf("There Is No Saved File In This Slot\n\n");
+                    printf("Please Enter [1] To Go To Main Menu ");
+                    scanf ("%d",&check);
+                    printf ("\n\n");
+
+                }while(check!=1);
+                goto mainmenu;
             }
             else if(ok==1)
                 {
@@ -174,8 +183,17 @@ mainmenu:
             Load(2);
             if (ok==0)
             {
-             printf("There Is No Saved File In This Slot");
-                 break;
+                int check=0 ;
+                do
+                {
+                    system("cls");
+                    printf("There Is No Saved File In This Slot\n\n");
+                    printf("Please Enter [1] To Go To Main Menu ");
+                    scanf ("%d",&check);
+                    printf ("\n\n");
+
+                }while(check!=1);
+                goto mainmenu;
             }
             else if(ok==1)
                 {
@@ -207,8 +225,17 @@ mainmenu:
             Load(3);
             if (ok==0)
             {
-             printf("There Is No Saved File In This Slot");
-                 break;
+                int check=0 ;
+                do
+                {
+                    system("cls");
+                    printf("There Is No Saved File In This Slot\n\n");
+                    printf("Please Enter [1] To Go To Main Menu ");
+                    scanf ("%d",&check);
+                    printf ("\n\n");
+
+                }while(check!=1);
+                goto mainmenu;
             }
             else if(ok==1)
                 {
@@ -238,7 +265,17 @@ mainmenu:
         }
         break;
     case 3:
-        /* code */
+        callTopScores(no_of_scores);
+        printf ("\n\n");
+        int check;
+        printf("Please Enter [1] To Go To Main Menu ");
+        scanf ("%d",&check);
+        while(check != 1)
+        {
+            printf ("Wrong Entry , Please Enter [1] To Go To Main Menu ");
+            scanf ("%d",&check);
+        }
+        goto mainmenu;
         break;
     case 4: //[4]Credit
         credit();
