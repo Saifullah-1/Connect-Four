@@ -9,4 +9,9 @@
 #include <ctype.h>
 void file_save(int file_number,int r , int c , int position[r*c], int turn , int moves1 ,int moves2 ,int score1 ,int  score2 , char grid[r][c] , int t);
 void Load(int) ;
+void Top(char s[100] , int n);
+void CheckRepeated();
+void Sort();
+void callTopScores(int n);
+
 #endif
