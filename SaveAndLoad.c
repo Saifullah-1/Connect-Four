@@ -40,7 +40,7 @@ void file_save(int file_number,int r , int c , int position[r*c], int turn , int
         fclose (p);
 }
 
-void Load (int slot)                     // Save File 1
+void Load (int slot)                     
 {
     FILE* p;
 
