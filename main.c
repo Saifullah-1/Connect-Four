@@ -6,9 +6,8 @@
 #include "Menu.h"
 #include "GameLoop.h"
 #include "SaveAndLoad.h"
-#include "Menu.c"
 
-int t=0 ;
+int t = 0;
 
 void main()
 {
@@ -50,17 +49,81 @@ mainmenu:
         switch (gameMode_menu_choice)
         {
         case 1:
+            ShowConsoleCursor(1);
             resetPlayerTurnArr(3);
+            playerData(1);
+            startGame();
+            start = clock();
+            while (checkFreeSpaces() != 0)
+            {
+            game:
+                i = Player1.PlayerScore;
+                j = Player2.PlayerScore;
+                ingame_menu_choice = inGameMenu();
+                switch (ingame_menu_choice)
+                {
+                case 1:
+                    break;
+                case 2:
+                    undo(1);
+                    printBoard();
+                    checkScore();
+                    playerData(1);
+                    end = clock();
+                    Time(start, end);
+                    goto game;
+                case 3:
+                    redo(1);
+                    printBoard();
+                    checkScore();
+                    playerData(1);
+                    end = clock();
+                    Time(start, end);
+                    goto game;
+                case 4:
+                    save_menu_choice = saveMenu();
+                case 5:
+                    goto mainmenu;
+                }
+                playerMove();
+                printBoard();
+                checkScore();
+                Player1.PlayerScore -= i;
+                Player2.PlayerScore -= j;
+                i = Player1.PlayerScore;
+                j = Player2.PlayerScore;
+                end = clock();
+                Time(start, end);
+                playerData(1);
+                // Sleep(500);
+                computerMove();
+                printBoard();
+                checkScore();
+                Player1.PlayerScore -= i;
+                Player2.PlayerScore -= j;
+                end = clock();
+                Time(start, end);
+                playerData(1);
+            }
+            checkWinner(1);
+            reset();
+            aftergame_menu_choice = afterGame();
+            if (aftergame_menu_choice == 1)
+            {
+                goto mainmenu;
+            }
+            else
+            {
+                exit(-1);
+            }
             break;
         case 2:
             ShowConsoleCursor(1);
             resetPlayerTurnArr(2);
-            playerData();
+            playerData(2);
             startGame();
             start = clock();
-
-            afterload:
-
+        afterload:
             while (checkFreeSpaces() != 0)
             {
             gamemenu:
@@ -75,7 +138,7 @@ mainmenu:
                     undo(2);
                     printBoard();
                     checkScore();
-                    playerData();
+                    playerData(2);
                     end = clock() + t;
                     Time(start, end);
                     goto gamemenu;
@@ -83,7 +146,7 @@ mainmenu:
                     redo(2);
                     printBoard();
                     checkScore();
-                    playerData();
+                    playerData(2);
                     end = clock() + t;
                     Time(start, end);
                     goto gamemenu;
@@ -93,13 +156,13 @@ mainmenu:
                     switch (save_menu_choice)
                     {
                     case 1:
-                        file_save(1,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board ,end);
+                        file_save(1, conf.height, conf.width, position_array, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore, board, end);
                         break;
                     case 2:
-                        file_save(2,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board ,end);
+                        file_save(2, conf.height, conf.width, position_array, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore, board, end);
                         break;
                     case 3:
-                        file_save(3,rows,colmns,position_array,turn,Player1.PlayerMoves,Player2.PlayerMoves,Player1.PlayerScore,Player2.PlayerScore,board ,end);
+                        file_save(3, conf.height, conf.width, position_array, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore, board, end);
                         break;
                     }
                     break;
@@ -114,9 +177,9 @@ mainmenu:
                 Player2.PlayerScore -= j;
                 end = clock() + t;
                 Time(start, end);
-                playerData();
+                playerData(2);
             }
-            checkWinner();
+            checkWinner(2);
             reset();
             // system("cls");
             // printBoard();
@@ -140,141 +203,137 @@ mainmenu:
         {
         case 1: //[1]File 1
             Load(1);
-            if (ok==0)
+            if (ok == 0)
             {
-                int check=0 ;
+                int check = 0;
                 do
                 {
                     system("cls");
                     printf("There Is No Saved File In This Slot\n\n");
                     printf("Please Enter [1] To Go To Main Menu ");
-                    scanf ("%d",&check);
-                    printf ("\n\n");
+                    scanf("%d", &check);
+                    printf("\n\n");
 
-                }while(check!=1);
+                } while (check != 1);
                 goto mainmenu;
             }
-            else if(ok==1)
-                {
-            resetBoard();
-            printBoard();
-            resetPlayerData();
-            resetUndoArray();
-            ShowConsoleCursor(1);
-            resetPlayerTurnArr(2);
-            playerData();
-            startGame();
-            Load(1);
-            printBoard();
-            playerData();
-            Player1.PlayerMoves = info[0];
-            Player2.PlayerMoves = info[1];
-            Player1.PlayerScore = info[2];
-            Player2.PlayerScore = info[3];
-            turn = info [4];
-            t = info[5];
-            CheckPlaces();
-            playerData();
+            else if (ok == 1)
+            {
+                resetBoard();
+                printBoard();
+                resetPlayerData();
+                resetUndoArray();
+                ShowConsoleCursor(1);
+                resetPlayerTurnArr(2);
+                playerData(2);
+                startGame();
+                Load(1);
+                printBoard();
+                playerData(2);
+                Player1.PlayerMoves = info[0];
+                Player2.PlayerMoves = info[1];
+                Player1.PlayerScore = info[2];
+                Player2.PlayerScore = info[3];
+                turn = info[4];
+                t = info[5];
+                CheckPlaces();
+                playerData(2);
 
-            goto afterload;
-            break;
+                goto afterload;
+                break;
             }
 
         case 2:
             Load(2);
-            if (ok==0)
+            if (ok == 0)
             {
-                int check=0 ;
+                int check = 0;
                 do
                 {
                     system("cls");
                     printf("There Is No Saved File In This Slot\n\n");
                     printf("Please Enter [1] To Go To Main Menu ");
-                    scanf ("%d",&check);
-                    printf ("\n\n");
+                    scanf("%d", &check);
+                    printf("\n\n");
 
-                }while(check!=1);
+                } while (check != 1);
                 goto mainmenu;
             }
-            else if(ok==1)
-                {
-            resetBoard();
-            printBoard();
-            resetPlayerData();
-            resetUndoArray();
-            ShowConsoleCursor(1);
-            resetPlayerTurnArr(2);
-            playerData();
-            startGame();
-            Load(2);
-            printBoard();
-            playerData();
-            Player1.PlayerMoves = info[0];
-            Player2.PlayerMoves = info[1];
-            Player1.PlayerScore = info[2];
-            Player2.PlayerScore = info[3];
-            turn = info [4];
-            t = info[5];
-            CheckPlaces();
-            playerData();
-
-            goto afterload;
-            break;
+            else if (ok == 1)
+            {
+                resetBoard();
+                printBoard();
+                resetPlayerData();
+                resetUndoArray();
+                ShowConsoleCursor(1);
+                resetPlayerTurnArr(2);
+                playerData(2);
+                startGame();
+                Load(2);
+                printBoard();
+                playerData(2);
+                Player1.PlayerMoves = info[0];
+                Player2.PlayerMoves = info[1];
+                Player1.PlayerScore = info[2];
+                Player2.PlayerScore = info[3];
+                turn = info[4];
+                t = info[5];
+                CheckPlaces();
+                playerData(2);
+                goto afterload;
+                break;
             }
-
         case 3: //[3]File 3
             Load(3);
-            if (ok==0)
+            if (ok == 0)
             {
-                int check=0 ;
+                int check = 0;
                 do
                 {
                     system("cls");
                     printf("There Is No Saved File In This Slot\n\n");
                     printf("Please Enter [1] To Go To Main Menu ");
-                    scanf ("%d",&check);
-                    printf ("\n\n");
-
-                }while(check!=1);
+                    scanf("%d", &check);
+                    printf("\n\n");
+                } while (check != 1);
                 goto mainmenu;
             }
-            else if(ok==1)
-                {
-            resetBoard();
-            printBoard();
-            resetPlayerData();
-            resetUndoArray();
-            ShowConsoleCursor(1);
-            resetPlayerTurnArr(2);
-            playerData();
-            startGame();
-            Load(3);
-            printBoard();
-            playerData();
-            Player1.PlayerMoves = info[0];
-            Player2.PlayerMoves = info[1];
-            Player1.PlayerScore = info[2];
-            Player2.PlayerScore = info[3];
-            turn = info [4];
-            t = info[5];
-            CheckPlaces();
-            playerData();
-
-            goto afterload;
-            break;
+            else if (ok == 1)
+            {
+                resetBoard();
+                printBoard();
+                resetPlayerData();
+                resetUndoArray();
+                ShowConsoleCursor(1);
+                resetPlayerTurnArr(2);
+                playerData(2);
+                startGame();
+                Load(3);
+                printBoard();
+                playerData(2);
+                Player1.PlayerMoves = info[0];
+                Player2.PlayerMoves = info[1];
+                Player1.PlayerScore = info[2];
+                Player2.PlayerScore = info[3];
+                turn = info[4];
+                t = info[5];
+                CheckPlaces();
+                playerData(2);
+                goto afterload;
+                break;
             }
         }
         break;
     case 3:
-        callTopScores(no_of_scores);
-        printf ("\n\n");
+        callTopScores(conf.scores);
+        printf("\n\n");
         int check;
         printf("Please Enter [1] To Go To Main Menu ");
-        scanf ("%d",&check);
-        while(check != 1)
+        scanf("%d", &check);
+        while (check != 1)
         {
-            printf ("Wrong Entry , Please Enter [1] To Go To Main Menu ");
-            scanf ("%d",&check);
+            printf("Wrong Entry , Please Enter [1] To Go To Main Menu ");
+            scanf("%d", &check);
         }
         goto mainmenu;
         break;
