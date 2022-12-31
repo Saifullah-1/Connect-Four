@@ -1,16 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <windows.h>
-#include <time.h>
 #include "Menu.h"
 #include "GameLoop.h"
-#include "SaveAndLoad.h"
-
-int t = 0;
+// #include "SaveAndLoad .c"
 
 void main()
 {
+    int t = 0;
     XML();
     int main_menu_choice;
     int gameMode_menu_choice;
@@ -156,13 +150,13 @@ mainmenu:
                     switch (save_menu_choice)
                     {
                     case 1:
-                        file_save(1, conf.height, conf.width, position_array, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore, board, end);
+                        file_save(1, conf.height, conf.width/*, position_array*/, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore/*, board*/, end);
                         break;
                     case 2:
-                        file_save(2, conf.height, conf.width, position_array, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore, board, end);
+                        file_save(2, conf.height, conf.width/*, position_array*/, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore/*, board*/, end);
                         break;
                     case 3:
-                        file_save(3, conf.height, conf.width, position_array, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore, board, end);
+                        file_save(3, conf.height, conf.width/*, position_array*/, turn, Player1.PlayerMoves, Player2.PlayerMoves, Player1.PlayerScore, Player2.PlayerScore/*, board*/, end);
                         break;
                     }
                     break;
@@ -213,12 +207,12 @@ mainmenu:
                     printf("Please Enter [1] To Go To Main Menu ");
                     scanf("%d", &check);
                     printf("\n\n");
-
                 } while (check != 1);
                 goto mainmenu;
             }
             else if (ok == 1)
             {
+                system("cls");
                 resetBoard();
                 printBoard();
                 resetPlayerData();
@@ -228,6 +222,7 @@ mainmenu:
                 playerData(2);
                 startGame();
                 Load(1);
+                checkFreeSpaces();
                 printBoard();
                 playerData(2);
                 Player1.PlayerMoves = info[0];
@@ -300,6 +295,7 @@ mainmenu:
             }
             else if (ok == 1)
             {
+                system("cls");
                 resetBoard();
                 printBoard();
                 resetPlayerData();
