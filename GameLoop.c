@@ -43,213 +43,96 @@ int searchInXML(char a[], char b[])
     }
     return counter;
 }
-// FUNCTION TO READ FROM XML FILE
-// FUNCTION TO READ FROM XML FILE
 void XML()
 {
-    // START REFEERE TO START OF INDEX TO CONFIGURATION TAG
-    // END REFEERE TO END OF INDEX OF CONFIGURATION TAGG
-    // START _W REFEERE TO STARTING INDEX OF WIDTH TAG
-    // END_W REFEERE TO ENDING INDEX OF WIDTH TAG
-    // START _H REFFERE TO START INDEX OF HEIGHT TAG
-    // END_H REFFERE TO END INDEX OF HIEGHT TAG
-    // START HS REFFERE TO START INDEX OF HIGHSCORES TAG
-    // END_HS REFFERE TO END INDEX OF HIGHSCORE TAG
-    // LEN REFFERE TO THE LENGTH BETWEEN TWO CONFIGURTIONS
-    // a IN A COUNTER
-    //  HS ------> HIGHSSCORE    H -------> HEIGHT      W ---------> WIDTH
     char y, x[200] = {'0'}, conf_1[] = "<Configurations>", width_1[] = "<Width>", height_1[] = "<Height>", highscores_1[] = "<Highscores>";
     char conf_2[] = "</Configurations>", width_2[] = "</Width>", height_2[] = "</Height>", highscores_2[] = "</Highscores>";
     int i = 0, start, end, start_w, end_w, start_h, end_h, start_hs, end_hs, len, a, size, HS, H, W;
-    FILE *file;
-    if (file = fopen("parameters.xml", "r"))
+    FILE *file = fopen("parameters.xml", "r");
+    while ((y = fgetc(file)) != EOF)
     {
-        while ((y = fgetc(file)) != EOF)
-        {
-            if (y != ' ' && y != '\n' && y != '\t')
-            { // IGNORING ANY SPACES OR TABS OR BREAKING LINE
-                x[i] = y;
-                i++;
-                len++;
-            }
-        }
-        start = searchInXML(conf_1, x); // CALLING OVERLAPPING FUNCTION
-        end = searchInXML(conf_2, x);
-        size = end - start + 1;
-
-        char array[size]; // ARRAY TO RED BETWEEN TWO CONFIGRATIONS TAGS
-        for (a = 0; a < size; a++)
-            array[a] = x[start + a]; // INTIALIZATION FOR NWE ARRAY
-        start_w = searchInXML(width_1, array);
-        end_w = searchInXML(width_2, array);
-        char row[3]; // CHECKING OPENING AND CLOSING THE TAGS IN RIGHT WAY
-        row[0] = array[start_w + 7];
-        row[1] = array[start_w + 8];
-        row[2] = '\0';
-        if (start_w != -1 && end_w != -1 && (end_w - start_w == 8 || end_w - start_w == 9) && atoi(row) >= 4)
-            W = atoi(row);
-        else
-        { // SET THE DEFULT IN THERE IS WRONG IN READING THE XML FILE
-            printf("File Corrupted\n");
-            int f = 1;
-            while (f < 3)
-            {
-                char path[200];
-                // system("cls");
-                gets(path);
-                file = fopen(path, "r");
-                if (file == NULL)
-                {
-                    printf("File Not Found Please Enter Valid File Path : ");
-                    gets(path);
-                    f++;
-                    file = fopen(path, "r");
-                    if (file == NULL)
-                    {
-                        printf("File Not Found Wait Loading Default Values ......");
-                        W = 9;
-                        H = 7;
-                        HS = 10;
-                        f++;
-                    }
-                    else
-                    {
-                        XML();
-                    }
-                }
-                else
-                {
-                    XML();
-                }
-            }
-            Sleep(1000);
-        }
-        start_h = searchInXML(height_1, array); // CALLING THE OVERLAPPING FUNCTION
-        end_h = searchInXML(height_2, array);
-        char col[3]; // CHECK OPENING AND CLOSING THE TAGS IN WRIGHT WAY
-        col[0] = array[start_h + 8];
-        col[1] = array[start_h + 9];
-        col[2] = '\0';
-        if (start_h != -1 && end_h != -1 && (end_h - start_h == 9 || end_h - start_h == 10) && atoi(col) >= 4)
-            H = atoi(col);
-        else
-        {
-            int f = 1;
-            while (f < 3)
-            {
-                char path[200];
-                system("cls");
-                printf("File Not Found Or Corrupted Please Enter File Path : ");
-                gets(path);
-                file = fopen(path, "r");
-                if (file == NULL)
-                {
-                    printf("File Not Found Please Enter Valid File Path : ");
-                    gets(path);
-                    f++;
-                    file = fopen(path, "r");
-                    if (file == NULL)
-                    {
-                        printf("File Not Found Wait Loading Default Values ......");
-                        W = 9;
-                        H = 7;
-                        HS = 10;
-                        f++;
-                    }
-                    else
-                    {
-                        XML();
-                    }
-                }
-                else
-                {
-                    XML();
-                }
-            }
-            Sleep(1000);
-        }
-        start_hs = searchInXML(highscores_1, array);
-        end_hs = searchInXML(highscores_2, array); // CALLING OVER LAPPING FUNCTIONS
-        char score[3];
-        score[0] = array[start_hs + 12]; // PUTTING BETWEEN TAGS IN ARRAY FOR READING WITH ATOI
-        score[1] = array[start_hs + 13];
-        score[2] = '\0';
-        if (start_hs != -1 && end_hs != -1 && (end_hs - start_hs == 13 || end_hs - start_hs == 14))
-            HS = atoi(score);
-        else
-        {
-            int f = 1;
-            while (f < 3)
-            {
-                char path[200];
-                system("cls");
-                printf("File Not Found Or Corrupted Please Enter File Path : ");
-                gets(path);
-                file = fopen(path, "r");
-                if (file == NULL)
-                {
-                    printf("File Not Found Please Enter Valid File Path : ");
-                    gets(path);
-                    f++;
-                    file = fopen(path, "r");
-                    if (file == NULL)
-                    {
-                        printf("File Not Found Wait Loading Default Values ......");
-                        W = 9;
-                        H = 7;
-                        HS = 10;
-                        f++;
-                    }
-                    else
-                    {
-                        XML();
-                    }
-                }
-                else
-                {
-                    XML();
-                }
-            } // ERROR MESSAGE
-            Sleep(2000);
+        if (y != ' ' && y != '\n' && y != '\t')
+        { // IGNORING ANY SPACES OR TABS OR BREAKING LINE
+            x[i] = y;
+            i++;
+            len++;
         }
     }
-    else if (file == NULL)
+    start = searchInXML(conf_1, x); // CALLING OVERLAPPING FUNCTION
+    end = searchInXML(conf_2, x);
+    size = end - start + 1;
+    if (start == -1 || end == -1)
     {
-        int f = 1;
-        while (f < 3)
-        {
-            char path[200];
-            system("cls");
-            printf("File Not Found Or Corrupted Please Enter File Path : ");
-            gets(path);
-            file = fopen(path, "r");
-            if (file == NULL)
-            {
-                printf("File Not Found Please Enter Valid File Path : ");
-                gets(path);
-                f++;
-                file = fopen(path, "r");
-                if (file == NULL)
-                {
-                    printf("File Not Found Wait Loading Default Values ......");
-                    W = 9;
-                    H = 7;
-                    HS = 10;
-                    f++;
-                }
-                else
-                {
-                    XML();
-                }
-            }
-            else
-            {
-                XML();
-            }
-        }
+        printf("File Corrupted\n");
+        printf("Wait Loading Default Values ......");
+        W = 9;
+        H = 7;
+        HS = 10;
+        conf.width = W;   // CHANGING THE GLOBAL VALUE FOR WIDTH
+        conf.height = H;  // CHANGING THE GLOBAL VALUE FOR HEIGHT
+        conf.scores = HS; // CHANGING THE GLOBAL VAUE FOR HIGH SCORE
+        board[conf.height][conf.width];
+        ColumnFreeSpacesArr[conf.width];
+        position_array[conf.height * conf.width];
+        player_turn_arr[conf.height * conf.width];
+        Sleep(1000);
+        fclose(file);
+        return;
     }
-
-    // READING FROM THE FILE
+    char array[size]; // ARRAY TO RED BETWEEN TWO CONFIGRATIONS TAGS
+    for (a = 0; a < size; a++)
+        array[a] = x[start + a]; // INTIALIZATION FOR NWE ARRAY
+    start_w = searchInXML(width_1, array);
+    end_w = searchInXML(width_2, array);
+    char row[3]; // CHECKING OPENING AND CLOSING THE TAGS IN RIGHT WAY
+    row[0] = array[start_w + 7];
+    row[1] = array[start_w + 8];
+    row[2] = '\0';
+    if (start_w != -1 && end_w != -1 && (end_w - start_w == 8 || end_w - start_w == 9) && atoi(row) >= 4)
+        W = atoi(row);
+    else
+    { // SET THE DEFULT IN THERE IS WRONG IN READING THE XML FILE
+        printf("File Corrupted\n");
+        printf("Wait Loading Default Values ......");
+        W = 9;
+        H = 7;
+        HS = 10;
+        Sleep(1000);
+    }
+    start_h = searchInXML(height_1, array); // CALLING THE OVERLAPPING FUNCTION
+    end_h = searchInXML(height_2, array);
+    char col[3]; // CHECK OPENING AND CLOSING THE TAGS IN WRIGHT WAY
+    col[0] = array[start_h + 8];
+    col[1] = array[start_h + 9];
+    col[2] = '\0';
+    if (start_h != -1 && end_h != -1 && (end_h - start_h == 9 || end_h - start_h == 10) && atoi(col) >= 4)
+        H = atoi(col);
+    else
+    {
+        printf("File Corrupted\n");
+        printf("Wait Loading Default Values ......");
+        W = 9;
+        H = 7;
+        HS = 10;
+        Sleep(1000);
+    }
+    start_hs = searchInXML(highscores_1, array);
+    end_hs = searchInXML(highscores_2, array); // CALLING OVER LAPPING FUNCTIONS
+    char score[3];
+    score[0] = array[start_hs + 12]; // PUTTING BETWEEN TAGS IN ARRAY FOR READING WITH ATOI
+    score[1] = array[start_hs + 13];
+    score[2] = '\0';
+    if (start_hs != -1 && end_hs != -1 && (end_hs - start_hs == 13 || end_hs - start_hs == 14))
+        HS = atoi(score);
+    else
+    {
+        printf("File Corrupted\n");
+        printf("Wait Loading Default Values ......");
+        W = 9;
+        H = 7;
+        HS = 10;
+        Sleep(1000);
+    }
 
     conf.width = W;   // CHANGING THE GLOBAL VALUE FOR WIDTH
     conf.height = H;  // CHANGING THE GLOBAL VALUE FOR HEIGHT
