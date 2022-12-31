@@ -43,6 +43,7 @@ int searchInXML(char a[], char b[])
     }
     return counter;
 }
+// FUNCTION TO READ FROM XML FILE
 void XML()
 {
     char y, x[200] = {'0'}, conf_1[] = "<Configurations>", width_1[] = "<Width>", height_1[] = "<Height>", highscores_1[] = "<Highscores>";
@@ -1000,11 +1001,11 @@ void playerData(int game_mode) // game_mode = 1 in Vs computer mode and = 2 in V
     LightBlue();
     if (game_mode == 1)
     {
-        printf("Number of moves of Computer: %i", Player2.PlayerMoves);
+        printf("Number of moves of Computer : %02i", Player2.PlayerMoves);
     }
     else
     {
-        printf("Number of moves of Player2: %i", Player2.PlayerMoves);
+        printf("Number of moves of Player2 : %02i", Player2.PlayerMoves);
     }
     gotoxy(23 + (conf.width) * 4, 8);
     red();
