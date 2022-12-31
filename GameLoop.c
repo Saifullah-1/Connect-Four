@@ -15,10 +15,12 @@ typedef struct
 configuration conf = {.width = 9, .height = 7, .scores = 10};
 
 char board[100][100]; // read dimentions from xml file
-int position_array[1000];
-int player_turn_arr[1000];
+int position_array[100];
+int player_turn_arr[100];
 int turn = 0;
 int ColumnFreeSpacesArr[100];
+
+
 // FUNCTION TO CHECK IF WORD IS FOUND IN STRING OR NOT
 int searchInXML(char a[], char b[])
 {
@@ -132,7 +134,7 @@ void XML()
         W = 9;
         H = 7;
         HS = 10;
-        Sleep(1000);
+        Sleep(2000);
     }
 
     conf.width = W;   // CHANGING THE GLOBAL VALUE FOR WIDTH
@@ -141,24 +143,212 @@ void XML()
     board[conf.height][conf.width];
     ColumnFreeSpacesArr[conf.width];
     position_array[conf.height * conf.width];
-    player_turn_arr[conf.height * conf.width];
+    player_turn_arr[conf.height * conf.width+2];
     fclose(file);
 }
-
-int hours, minutes, seconds;
-void SaveTop(char s[], int n)
+int var;
+int info[6] = {0};
+int ok;
+void file_save(int file_number, int r, int c, /*int position[],*/ int turn, int moves1, int moves2, int score1, int score2, /*char grid[r][c],*/ int t)
 {
-    int i = 0;
-    FILE *Ptop;
-    Ptop = fopen("Scores.txt", "a");
-    while (s[i])
+    FILE *p;
+    if (file_number == 1)
     {
-        fprintf(Ptop, "%c", tolower(s[i]));
-        i++;
+        p = fopen("SaveGame1.bin", "wb");
     }
-    fprintf(Ptop, " : %d\n", n);
-    fclose(Ptop);
+
+    else if (file_number == 2)
+    {
+        p = fopen("SaveGame2.bin", "wb");
+    }
+
+    else if (file_number == 3)
+    {
+        p = fopen("SaveGame3.bin", "wb");
+    }
+    for (int i = 0; i < r * c; i++)
+    {
+        fwrite(&position_array[i], sizeof(position_array[i]), 1, p);
+    }
+    fwrite(&moves1, sizeof(moves1), 1, p);
+    fwrite(&moves2, sizeof(moves2), 1, p);
+    fwrite(&score1, sizeof(score1), 1, p);
+    fwrite(&score2, sizeof(score2), 1, p);
+    fwrite(&turn, sizeof(turn), 1, p);
+    fwrite(&t, sizeof(t), 1, p);
+
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+            fwrite(&board[i][j], sizeof(board[i][j]), 1, p);
+    }
+    fclose(p);
 }
+
+void Load(int slot)
+{
+    FILE *p;
+
+    if (slot == 1)
+    {
+        p = fopen("SaveGame1.bin", "rb");
+    }
+
+    else if (slot == 2)
+    {
+        p = fopen("SaveGame2.bin", "rb");
+    }
+
+    if (slot == 3)
+    {
+        p = fopen("SaveGame3.bin", "rb");
+    }
+
+    if (p == NULL)
+        ok = 0;
+    else if (p != NULL)
+    {
+        ok = 1;
+        for (int i = 0; i < conf.height * conf.width; i++)
+        {
+            fread(&position_array[i], sizeof(position_array[i]), 1, p);
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            fread(&info[i], sizeof(info[i]), 1, p);
+        }
+
+        for (int i = 0; i < conf.height; i++)
+        {
+            for (int j = 0; j < conf.width; j++)
+                fread(&board[i][j], sizeof(board[i][j]), 1, p);
+        }
+    }
+    fclose(p);
+}
+
+int Scores[500];
+char Names[500][100];
+
+int ScoresMod[100];
+char NamesMod[100][100];
+
+void Top(char s[100], int n)
+{
+
+    FILE *p;
+    p = fopen("Top.bin", "rb");
+
+    int ind = 0;
+    int j = 0;
+
+    while (!feof(p))
+    {
+        if (fread(Names[j], sizeof(Names[j]), 1, p) == 0)
+            break;
+        else
+        {
+            fread(&Scores[j], sizeof(Scores[j]), 1, p);
+            ind++;
+            j++;
+        }
+    }
+    fclose(p);
+
+    var = ind;
+}
+
+void CheckRepeated() // Ignoring Duplicate Names
+{
+    for (int i = 0; i < var - 1; i++)
+    {
+        for (int k = 1 + i; k < var; k++)
+        {
+            if (Names[i] != " " & (strcasecmp(Names[i], Names[k]) == 0))
+            {
+                if (Scores[i] >= Scores[k])
+                {
+                    strcpy(Names[k], " ");
+                    Scores[k] = -1;
+                }
+                else if (Scores[i] < Scores[k])
+                {
+                    strcpy(Names[i], " ");
+                    Scores[i] = -1;
+                }
+            }
+        }
+    }
+}
+
+void Sort() // Sorting Our File
+{
+    int sorted = 0;
+    int num = 0;
+    int flag = 0;
+
+    for (int i = 0; i < var; i++)
+    {
+        if (Names[i] != " " && Scores[i] != -1)
+        {
+            ScoresMod[num] = Scores[i];
+            strcpy(NamesMod[num], Names[i]);
+            flag++;
+            num++;
+        }
+    }
+
+    while (!sorted)
+    {
+        sorted = 1;
+        for (int k = 0; k < num - 1; k++)
+        {
+            if (ScoresMod[k] < ScoresMod[k + 1])
+            {
+                int temp = ScoresMod[k];
+                ScoresMod[k] = ScoresMod[k + 1];
+                ScoresMod[k + 1] = temp;
+
+                char ch[100];
+                strcpy(ch, NamesMod[k]);
+                strcpy(NamesMod[k], NamesMod[k + 1]);
+                strcpy(NamesMod[k + 1], ch);
+            }
+        }
+        num -= 1;
+    }
+
+    FILE *ptr;
+    ptr = fopen("Top.bin", "wb");
+
+    for (int i = 0; i < flag; i++)
+    {
+        fwrite(NamesMod[i], sizeof(NamesMod[i]), 1, ptr);
+        fwrite(&ScoresMod[i], sizeof(ScoresMod[i]), 1, ptr);
+    }
+
+    fclose(ptr);
+}
+
+void callTopScores(int n) // Calling The Top N Scores With Their Players
+{
+    int x;
+    char y[100];
+
+    FILE *ptr;
+    ptr = fopen("Top.bin", "rb");
+
+    for (int i = 0; i < n; i++)
+    {
+        fread(y, sizeof(y), 1, ptr);
+        fread(&x, sizeof(x), 1, ptr);
+        printf("\n[%d]- %s With Score %d\n", i + 1, y, x);
+    }
+
+    fclose(ptr);
+}
+int hours, minutes, seconds;
 
 void Time(int start, int end)
 {
@@ -962,9 +1152,10 @@ void checkScore(void)
         }
     }
 }
-
+FILE *p;
 void playerData(int game_mode) // game_mode = 1 in Vs computer mode and = 2 in Vs human mode
 {
+    
     if (turn < conf.height * conf.width)
     {
         if (player_turn_arr[turn] == 1)
@@ -996,7 +1187,7 @@ void playerData(int game_mode) // game_mode = 1 in Vs computer mode and = 2 in V
     }
     gotoxy(23 + (conf.width) * 4, 6);
     red();
-    printf("Number of moves of Player1 : %i", Player1.PlayerMoves);
+    printf("Number of moves of Player1 : %02i", Player1.PlayerMoves);
     gotoxy(23 + (conf.width) * 4, 7);
     LightBlue();
     if (game_mode == 1)
@@ -1039,13 +1230,17 @@ void checkWinner(int game_mode)
                 printf("                                                                                                                            ");
                 gotoxy(0, 8 + (conf.height - 1) * 2);
                 printf("Player1 Won With score %i!\n Please Enter Player1 Name : ", Player1.PlayerScore);
-                fgets(Player1.PlayerName, 101, stdin);
-                if (strlen(Player1.PlayerName) != 1)
-                {
-                    SaveTop(Player1.PlayerName, Player1.PlayerScore);
-                    break;
-                }
+                gets(Player1.PlayerName);
+                break;
             }
+            
+            p = fopen("Top.bin", "ab");
+            fwrite(Player1.PlayerName, sizeof(Player1.PlayerName), 1, p);
+            fwrite(&Player1.PlayerScore, sizeof(Player1.PlayerScore), 1, p);
+            fclose(p);
+            Top(Player1.PlayerName, Player1.PlayerScore);
+            CheckRepeated();
+            Sort();
         }
         else if (game_mode == 1)
         {
@@ -1055,14 +1250,17 @@ void checkWinner(int game_mode)
                 gotoxy(0, 8 + (conf.height - 1) * 2);
                 printf("                                                                                                                            ");
                 gotoxy(0, 8 + (conf.height - 1) * 2);
-                printf("YOU WON With score %i!\n Please Enter Player1 Name : ", Player1.PlayerScore);
-                fgets(Player1.PlayerName, 101, stdin);
-                if (strlen(Player1.PlayerName) != 1)
-                {
-                    SaveTop(Player1.PlayerName, Player1.PlayerScore);
-                    break;
-                }
+                gets(Player1.PlayerName);
+                break;
             }
+            
+            p = fopen("Top.bin", "ab");
+            fwrite(Player1.PlayerName, sizeof(Player1.PlayerName), 1, p);
+            fwrite(&Player1.PlayerScore, sizeof(Player1.PlayerScore), 1, p);
+            fclose(p);
+            Top(Player1.PlayerName, Player1.PlayerScore);
+            CheckRepeated();
+            Sort();
         }
     }
     else if (Player1.PlayerScore < Player2.PlayerScore)
@@ -1076,13 +1274,17 @@ void checkWinner(int game_mode)
             while (1)
             {
                 printf("Player2 Won With score %i!\n Please Enter Player2 Name : ", Player2.PlayerScore);
-                fgets(Player2.PlayerName, 101, stdin);
-                if (strlen(Player2.PlayerName) != 1)
-                {
-                    SaveTop(Player2.PlayerName, Player2.PlayerScore);
-                    break;
-                }
+                gets(Player2.PlayerName);
+                break;
             }
+            
+            p = fopen("Top.bin", "ab");
+            fwrite(Player2.PlayerName, sizeof(Player2.PlayerName), 1, p);
+            fwrite(&Player2.PlayerScore, sizeof(Player2.PlayerScore), 1, p);
+            fclose(p);
+            Top(Player2.PlayerName, Player2.PlayerScore);
+            CheckRepeated();
+            Sort();
         }
         else if (game_mode == 1)
         {
@@ -1093,13 +1295,17 @@ void checkWinner(int game_mode)
             while (1)
             {
                 printf("YOU LOSE With score %i!\n Please Enter YOUR Name : ", Player1.PlayerScore);
-                fgets(Player1.PlayerName, 101, stdin);
-                if (strlen(Player1.PlayerName) != 1)
-                {
-                    SaveTop(Player1.PlayerName, Player1.PlayerScore);
-                    break;
-                }
+                gets(Player1.PlayerName);
+                break;
             }
+            
+            p = fopen("Top.bin", "ab");
+            fwrite(Player1.PlayerName, sizeof(Player1.PlayerName), 1, p);
+            fwrite(&Player1.PlayerScore, sizeof(Player1.PlayerScore), 1, p);
+            fclose(p);
+            Top(Player1.PlayerName, Player1.PlayerScore);
+            CheckRepeated();
+            Sort();
         }
     }
     else if (Player1.PlayerScore == Player2.PlayerScore)
@@ -1118,13 +1324,18 @@ void checkWinner(int game_mode)
                 printf("                                                                                                                            ");
                 gotoxy(0, 9 + (conf.height - 1) * 2);
                 printf("Please Enter Player1 Name : ");
-                fgets(Player1.PlayerName, 101, stdin);
-                if (strlen(Player1.PlayerName) != 1)
-                {
-                    SaveTop(Player1.PlayerName, Player1.PlayerScore);
-                    break;
-                }
+                gets(Player1.PlayerName);
+
+                break;
             }
+            
+            p = fopen("Top.bin", "ab");
+            fwrite(Player1.PlayerName, sizeof(Player1.PlayerName), 1, p);
+            fwrite(&Player1.PlayerScore, sizeof(Player1.PlayerScore), 1, p);
+            fclose(p);
+            Top(Player1.PlayerName, Player1.PlayerScore);
+            CheckRepeated();
+            Sort();
             LightBlue();
             while (1)
             {
@@ -1132,13 +1343,17 @@ void checkWinner(int game_mode)
                 printf("                                                                                                                            ");
                 gotoxy(0, 10 + (conf.height - 1) * 2);
                 printf("Please Enter Player2 Name : ");
-                fgets(Player2.PlayerName, 101, stdin);
-                if (strlen(Player2.PlayerName) != 1)
-                {
-                    SaveTop(Player2.PlayerName, Player2.PlayerScore);
-                    break;
-                }
+                gets(Player2.PlayerName);
+
+                break;
             }
+            p = fopen("Top.bin", "ab");
+            fwrite(Player2.PlayerName, sizeof(Player2.PlayerName), 1, p);
+            fwrite(&Player2.PlayerScore, sizeof(Player2.PlayerScore), 1, p);
+            fclose(p);
+            Top(Player2.PlayerName, Player2.PlayerScore);
+            CheckRepeated();
+            Sort();
         }
         else if (game_mode == 1)
         {
@@ -1154,13 +1369,18 @@ void checkWinner(int game_mode)
                 printf("                                                                                                                            ");
                 gotoxy(0, 9 + (conf.height - 1) * 2);
                 printf("Please Enter Player1 Name : ");
-                fgets(Player1.PlayerName, 101, stdin);
-                if (strlen(Player1.PlayerName) != 1)
-                {
-                    SaveTop(Player1.PlayerName, Player1.PlayerScore);
-                    break;
-                }
+                gets(Player1.PlayerName);
+
+                break;
             }
+            FILE *p;
+            p = fopen("Top.bin", "ab");
+            fwrite(Player1.PlayerName, sizeof(Player1.PlayerName), 1, p);
+            fwrite(&Player1.PlayerScore, sizeof(Player1.PlayerScore), 1, p);
+            fclose(p);
+            Top(Player1.PlayerName, Player1.PlayerScore);
+            CheckRepeated();
+            Sort();
         }
     }
 }
