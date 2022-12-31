@@ -12,6 +12,7 @@ int t=0 ;
 
 void main()
 {
+    XML();
     int main_menu_choice;
     int gameMode_menu_choice;
     int ingame_menu_choice;
