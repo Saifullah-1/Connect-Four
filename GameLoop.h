@@ -7,6 +7,8 @@
 #include <windows.h>
 #include "GameLoop.c"
 
+int searchInXML(char a[], char b[]);
+void XML ();
 void SaveTop(char s[],int n);
 void Time (int start , int end);
 void Instant_Save(int i , int j);
