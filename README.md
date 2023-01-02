@@ -1,6 +1,6 @@
 # Connect4
 ## C Programming Final Project for the first semester in CSED Alex. University BY Ahmed Ashraf and Saifullah Mousaad
-### For more Informations [Report](https://github.com/Saifullah-1/Connect4/blob/C4/ConnectFour.pdf)
+
 
 # User Manual
 ### 
@@ -10,3 +10,4 @@
 - Forth is the credit where you know some information about the game and who made it .
 - Fifth and last exit the game if you want to quit it.
 - The Idea Of the game is to put 4 consecutive symbols of yours to earn points , every consecutive 4 symbols you get a point and by the time the board is full , the winner is the player whose score is more.
+### For more Informations [Report](https://github.com/Saifullah-1/Connect4/blob/C4/ConnectFour.pdf)
