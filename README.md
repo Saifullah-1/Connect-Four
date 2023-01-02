@@ -3,7 +3,8 @@
 ### For more Informations [Report](https://github.com/Saifullah-1/Connect4/blob/C4/ConnectFour.pdf)
 
 # User Manual
-### - First you’ll enter the main menu , there are 5 choices you can choose one : the first is to enter a new game and this has to options ; against the computer or (AI) or against your friend using the same keyboard .
+### 
+- First you’ll enter the main menu , there are 5 choices you can choose one : the first is to enter a new game and this has to options ; against the computer or (AI) or against your friend using the same keyboard .
 - Second is to load saved games you have saved before using the in-game menu while you are playing.
 - Third choice is to see the top scores of the games played before
 - Forth is the credit where you know some information about the game and who made it .
