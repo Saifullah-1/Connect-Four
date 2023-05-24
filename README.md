@@ -1,6 +1,6 @@
 # Connect Four Game :video_game:
 
-This repository contains the source code and files for a Connect Four game developed as a final project for the first year in Computer Science and Engineering Department (CSED). The game was created in C programming language and aims to provide an interactive gaming experience.
+This repository contains the source code and files for a Connect Four game developed as a final project for the first year in Computer & Systems Engineering Department (CSED). The game was created in C programming language and aims to provide an interactive gaming experience.
 
 ## 🎯 Team Members :busts_in_silhouette:
 - AhmedIAshraf (GitHub: [AhmedIAshraf](https://github.com/AhmedIAshraf))
